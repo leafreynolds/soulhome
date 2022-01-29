@@ -1,0 +1,19 @@
+{
+  "name": "soulhome:soulhome",
+  "effects": "soulhome:soul_sky_property",
+  "infiniburn": "minecraft:infiniburn_overworld",
+  "min_y": 0,
+  "height": 256,
+  "logical_height": 256,
+  "natural": true,
+  "piglin_safe": true,
+  "coordinate_scale": 1.0,
+  "bed_works": true,
+  "has_skylight": true,
+  "has_ceiling": false,
+  "ultrawarm": false,
+  "has_raids": false,
+  "respawn_anchor_works": true,
+  "ambient_light": 0.8,
+  "fixed_time": 6000
+}

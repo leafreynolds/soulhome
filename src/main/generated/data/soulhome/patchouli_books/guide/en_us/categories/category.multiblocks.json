@@ -1,0 +1,7 @@
+{
+  "name": "category.multiblocks",
+  "description": "Structures you can build within your soul that will grant you power.",
+  "icon": "soulhome:guide",
+  "sortnum": 0,
+  "secret": false
+}

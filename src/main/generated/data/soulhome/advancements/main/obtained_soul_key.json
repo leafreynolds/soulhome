@@ -1,0 +1,41 @@
+{
+  "parent": "soulhome:main/root",
+  "display": {
+    "icon": {
+      "item": "soulhome:guide"
+    },
+    "title": {
+      "translate": "advancements.soulhome.obtained_soul_key.title"
+    },
+    "description": {
+      "translate": "advancements.soulhome.obtained_soul_key.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "rewards": {
+    "experience": 50,
+    "loot": [
+      "soulhome:guide"
+    ]
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "soulhome:soulkey"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ]
+}

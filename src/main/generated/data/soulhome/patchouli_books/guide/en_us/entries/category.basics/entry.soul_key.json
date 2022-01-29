@@ -1,0 +1,28 @@
+{
+  "name": "entry.soul_key",
+  "category": "category.basics",
+  "icon": "soulhome:guide",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Hey, well done! You\u0027ve managed to obtain the centerpiece to this mod. Now you just need to enter your soul by holding [$(k:use)]. You\u0027ll see some particles start appearing at your feet, an every widening circle showing the area of effect."
+    },
+    {
+      "type": "text",
+      "text": "If you hold [$(k:use)] for the full duration, you and all other entities within the circle will be transported to your soul. This is how you\u0027d bring friends and livestock into your soul."
+    },
+    {
+      "type": "crafting",
+      "text": "All you need is a little bit of iron and an ender pearl",
+      "title": "SoulKey",
+      "recipe": "soulhome:soulkey",
+      "recipe2": ""
+    }
+  ],
+  "advancement": "soulhome:main/obtained_soul_key",
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 3,
+  "turnin": "soulhome:main/obtained_soul_key"
+}

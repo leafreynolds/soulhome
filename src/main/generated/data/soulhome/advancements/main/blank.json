@@ -1,0 +1,31 @@
+{
+  "parent": "soulhome:main/obtained_guide",
+  "display": {
+    "icon": {
+      "item": "soulhome:guide"
+    },
+    "title": {
+      "translate": "advancements.soulhome.blank.title"
+    },
+    "description": {
+      "translate": "advancements.soulhome.blank.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "rewards": {
+    "experience": 5
+  },
+  "criteria": {
+    "impossible": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "impossible"
+    ]
+  ]
+}

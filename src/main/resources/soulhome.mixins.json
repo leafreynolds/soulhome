@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "leaf.soulhome.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "soulhome.refmap.json",
+  "mixins": [
+  ],
+  "client": [
+    "EffectInstanceMixin",
+    "EntityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

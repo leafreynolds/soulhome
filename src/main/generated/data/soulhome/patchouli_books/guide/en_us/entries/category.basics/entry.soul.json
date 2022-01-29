@@ -1,0 +1,17 @@
+{
+  "name": "entry.soul",
+  "category": "category.basics",
+  "icon": "soulhome:guide",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Woo! Welcome to your soul. $(p)Kinda empty, isn\u0027t it? I wonder what that says about you, huh. $(p)For now, that\u0027s all there is to the mod. Look out for future updates that will let you build multiblock structures to give yourself buffs."
+    }
+  ],
+  "advancement": "soulhome:main/obtained_soul_key",
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 4,
+  "turnin": "soulhome:main/entered_soul_dimension"
+}
