@@ -5,7 +5,7 @@
 package leaf.soulhome.utils;
 
 import leaf.soulhome.SoulHome;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.Locale;
 

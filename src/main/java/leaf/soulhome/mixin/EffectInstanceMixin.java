@@ -4,10 +4,10 @@
 
 package leaf.soulhome.mixin;
 
-import net.minecraft.potion.EffectInstance;
+import net.minecraft.world.effect.MobEffectInstance;
 import org.spongepowered.asm.mixin.Mixin;
 
-@Mixin(EffectInstance.class)
+@Mixin(MobEffectInstance.class)
 public class EffectInstanceMixin
 {
 

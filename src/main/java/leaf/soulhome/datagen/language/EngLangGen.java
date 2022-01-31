@@ -9,8 +9,8 @@ import leaf.soulhome.constants.Constants;
 import leaf.soulhome.items.SoulHomeItemGroups;
 import leaf.soulhome.utils.StringHelper;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.LanguageProvider;
 import net.minecraftforge.registries.ForgeRegistries;
 

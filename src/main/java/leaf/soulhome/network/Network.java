@@ -6,22 +6,21 @@ package leaf.soulhome.network;
 
 import com.mojang.serialization.Codec;
 import leaf.soulhome.SoulHome;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTDynamicOps;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fml.network.NetworkEvent;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.PacketDistributor;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.network.simple.SimpleChannel;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -41,10 +40,10 @@ public class Network
 
     public static <PACKET extends Consumer<NetworkEvent.Context>> void registerCodecPacket(int id, SimpleChannel channel, Codec<PACKET> codec, PACKET defaultPacket)
     {
-        final BiConsumer<PACKET, PacketBuffer> encoder = (packet, buffer) -> codec.encodeStart(NBTDynamicOps.INSTANCE, packet)
+        final BiConsumer<PACKET, FriendlyByteBuf> encoder = (packet, buffer) -> codec.encodeStart(NbtOps.INSTANCE, packet)
                 .result()
-                .ifPresent(nbt -> buffer.writeNbt((CompoundNBT) nbt));
-        final Function<PacketBuffer, PACKET> decoder = buffer -> codec.parse(NBTDynamicOps.INSTANCE, buffer.readNbt())
+                .ifPresent(nbt -> buffer.writeNbt((CompoundTag) nbt));
+        final Function<FriendlyByteBuf, PACKET> decoder = buffer -> codec.parse(NbtOps.INSTANCE, buffer.readNbt())
                 .result()
                 .orElse(defaultPacket);
         final BiConsumer<PACKET, Supplier<NetworkEvent.Context>> handler = (packet, context) ->
@@ -66,7 +65,7 @@ public class Network
     }
 
     //server side to client
-    public static void sendTo(Object msg, ServerPlayerEntity player)
+    public static void sendTo(Object msg, ServerPlayer player)
     {
         if (!(player instanceof FakePlayer))
         {
@@ -79,22 +78,18 @@ public class Network
         NETWORK_CHANNEL.send(PacketDistributor.ALL.noArg(), packet);
     }
 
-    public static SUpdateTileEntityPacket createTEUpdatePacket(TileEntity tile)
-    {
-        return new SUpdateTileEntityPacket(tile.getBlockPos(), -1, tile.getUpdateTag());
-    }
 
-    public static void sendToAllAround(Object mes, RegistryKey<World> dim, BlockPos pos, int radius)
+    public static void sendToAllAround(Object mes, ResourceKey<Level> dim, BlockPos pos, int radius)
     {
         NETWORK_CHANNEL.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(pos.getX(), pos.getY(), pos.getZ(), radius, dim)), mes);
     }
 
-    public static void sendToAllInWorld(Object mes, ServerWorld world)
+    public static void sendToAllInWorld(Object mes, ServerLevel world)
     {
         NETWORK_CHANNEL.send(PacketDistributor.DIMENSION.with(world::dimension), mes);
     }
 
-    public static void sendToTrackingTE(Object mes, TileEntity te)
+    public static void sendToTrackingTE(Object mes, BlockEntity te)
     {
         if (te != null && !te.getLevel().isClientSide)
         {

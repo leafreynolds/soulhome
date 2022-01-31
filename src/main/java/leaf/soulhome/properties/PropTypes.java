@@ -5,11 +5,9 @@
 package leaf.soulhome.properties;
 
 import leaf.soulhome.items.SoulHomeItemGroups;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
-import net.minecraft.item.Rarity;
-import net.minecraftforge.common.ToolType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.item.Item;
 
 import java.util.function.Supplier;
 
@@ -17,7 +15,7 @@ public class PropTypes
 {
     public static class Blocks
     {
-        public static final Supplier<Block.Properties> EXAMPLE = () -> Block.Properties.of(Material.GLASS).strength(2.0F, 6.0F).harvestLevel(0).harvestTool(ToolType.PICKAXE);
+        public static final Supplier<Block.Properties> EXAMPLE = () -> Block.Properties.of(Material.GLASS).strength(2.0F, 6.0F);
     }
 
     public static class Items

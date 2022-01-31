@@ -27,7 +27,9 @@
       "conditions": {
         "items": [
           {
-            "item": "soulhome:soulkey"
+            "items": [
+              "soulhome:soulkey"
+            ]
           }
         ]
       }

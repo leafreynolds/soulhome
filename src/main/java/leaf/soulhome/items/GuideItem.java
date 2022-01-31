@@ -9,20 +9,17 @@ import leaf.soulhome.constants.Constants;
 import leaf.soulhome.properties.PropTypes;
 import leaf.soulhome.registry.ItemsRegistry;
 import leaf.soulhome.utils.TextHelper;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Rarity;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vazkii.patchouli.api.PatchouliAPI;
@@ -44,16 +41,16 @@ public class GuideItem extends BaseItem
     }
 
 
-    public static ITextComponent getTitle(ItemStack stack)
+    public static Component getTitle(ItemStack stack)
     {
         //botania uses this when they are rendering their book title in the world.
 
-        ITextComponent title = stack.getDisplayName();
+        Component title = stack.getDisplayName();
 
         String akashicTomeNBT = "akashictome:displayName";
         if (stack.hasTag() && stack.getTag().contains(akashicTomeNBT))
         {
-            title = ITextComponent.Serializer.fromJson(stack.getTag().getString(akashicTomeNBT));
+            title = Component.Serializer.fromJson(stack.getTag().getString(akashicTomeNBT));
         }
 
         return title;
@@ -61,12 +58,12 @@ public class GuideItem extends BaseItem
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
+    public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn)
     {
-        tooltip.add(getEdition().copy().withStyle(TextFormatting.GRAY));
+        tooltip.add(getEdition().copy().withStyle(ChatFormatting.GRAY));
     }
 
-    public static ITextComponent getEdition()
+    public static Component getEdition()
     {
         if (PatchouliCompat.PatchouliIsPresent())
         {
@@ -80,16 +77,17 @@ public class GuideItem extends BaseItem
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
+    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn)
     {
         ItemStack stack = playerIn.getItemInHand(handIn);
 
-        if (playerIn instanceof ServerPlayerEntity)
+        if (playerIn instanceof ServerPlayer)
         {
-            ServerPlayerEntity player = (ServerPlayerEntity) playerIn;
+            ServerPlayer player = (ServerPlayer) playerIn;
             PatchouliAPI.get().openBookGUI(player, ItemsRegistry.GUIDE.getId());
         }
 
-        return new ActionResult<>(ActionResultType.SUCCESS, stack);
+        return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
     }
+
 }

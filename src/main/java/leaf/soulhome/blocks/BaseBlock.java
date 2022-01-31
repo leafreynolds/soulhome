@@ -4,8 +4,8 @@
 
 package leaf.soulhome.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 
 public class BaseBlock extends Block
 {

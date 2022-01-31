@@ -4,37 +4,37 @@
 
 package leaf.soulhome.utils;
 
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.play.server.SPlayEntityEffectPacket;
-import net.minecraft.network.play.server.SPlayerAbilitiesPacket;
-import net.minecraft.network.play.server.SServerDifficultyPacket;
-import net.minecraft.network.play.server.SSetExperiencePacket;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.server.TicketType;
-import net.minecraft.world.storage.IWorldInfo;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.protocol.game.ClientboundUpdateMobEffectPacket;
+import net.minecraft.network.protocol.game.ClientboundPlayerAbilitiesPacket;
+import net.minecraft.network.protocol.game.ClientboundChangeDifficultyPacket;
+import net.minecraft.network.protocol.game.ClientboundSetExperiencePacket;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.util.Mth;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.TicketType;
+import net.minecraft.world.level.storage.LevelData;
 
 public class TeleportHelper
 {
-    public static void teleportEntity(Entity entity, ServerWorld destinationDimension, double x, double y, double z, float yRot, float xRot)
+    public static void teleportEntity(Entity entity, ServerLevel destinationDimension, double x, double y, double z, float yRot, float xRot)
     {
         if (entity == null || entity.level.isClientSide || !entity.canChangeDimensions())
         {
             return;
         }
 
-        ServerWorld currentDimension = entity.getServer().getLevel(entity.getCommandSenderWorld().dimension());
+        ServerLevel currentDimension = entity.getServer().getLevel(entity.getCommandSenderWorld().dimension());
 
 
         boolean isChangingDimension = !currentDimension.dimension().location().equals(destinationDimension.dimension().location());
-        final boolean entityIsPlayer = entity instanceof ServerPlayerEntity;
-        final ServerPlayerEntity serverPlayerEntity = entityIsPlayer ? (ServerPlayerEntity) entity : null;
+        final boolean entityIsPlayer = entity instanceof ServerPlayer;
+        final ServerPlayer serverPlayerEntity = entityIsPlayer ? (ServerPlayer) entity : null;
 
         if (isChangingDimension && !entity.canChangeDimensions())
         {
@@ -72,22 +72,22 @@ public class TeleportHelper
             serverPlayerEntity.setYHeadRot(yRot);
 
             //restore stuff. Annoyingly it doesn't happen automatically
-            for (EffectInstance effectinstance : serverPlayerEntity.getActiveEffects())
+            for (MobEffectInstance effectinstance : serverPlayerEntity.getActiveEffects())
             {
-                serverPlayerEntity.connection.send(new SPlayEntityEffectPacket(serverPlayerEntity.getId(), effectinstance));
+                serverPlayerEntity.connection.send(new ClientboundUpdateMobEffectPacket(serverPlayerEntity.getId(), effectinstance));
             }
 
-            IWorldInfo worldInfo = serverPlayerEntity.level.getLevelData();
+            LevelData worldInfo = serverPlayerEntity.level.getLevelData();
             //I'd always wondered what the deal was with xp not showing properly.
-            serverPlayerEntity.connection.send(new SPlayerAbilitiesPacket(serverPlayerEntity.abilities));
-            serverPlayerEntity.connection.send(new SServerDifficultyPacket(worldInfo.getDifficulty(), worldInfo.isDifficultyLocked()));
-            serverPlayerEntity.connection.send(new SSetExperiencePacket(serverPlayerEntity.experienceProgress, serverPlayerEntity.totalExperience, serverPlayerEntity.experienceLevel));
+            serverPlayerEntity.connection.send(new ClientboundPlayerAbilitiesPacket(serverPlayerEntity.getAbilities()));
+            serverPlayerEntity.connection.send(new ClientboundChangeDifficultyPacket(worldInfo.getDifficulty(), worldInfo.isDifficultyLocked()));
+            serverPlayerEntity.connection.send(new ClientboundSetExperiencePacket(serverPlayerEntity.experienceProgress, serverPlayerEntity.totalExperience, serverPlayerEntity.experienceLevel));
         }
         else
         {
-            float entityYRot = MathHelper.wrapDegrees(yRot);
-            float entityXRot = MathHelper.wrapDegrees(xRot);
-            entityXRot = MathHelper.clamp(entityXRot, -90.0F, 90.0F);
+            float entityYRot = Mth.wrapDegrees(yRot);
+            float entityXRot = Mth.wrapDegrees(xRot);
+            entityXRot = Mth.clamp(entityXRot, -90.0F, 90.0F);
             if (isChangingDimension)
             {
                 Entity originalEntity = entity;
@@ -102,9 +102,9 @@ public class TeleportHelper
                 entity.moveTo(x, y, z, entityYRot, entityXRot);
                 entity.setYHeadRot(entityYRot);
 
-                currentDimension.despawn(originalEntity);
+                currentDimension.removeEntity(originalEntity);
 
-                destinationDimension.addFromAnotherDimension(entity);
+                destinationDimension.addFreshEntity(entity);
 
                 currentDimension.resetEmptyTime();
                 destinationDimension.resetEmptyTime();
@@ -123,9 +123,9 @@ public class TeleportHelper
             entity.setOnGround(true);
         }
 
-        if (entity instanceof CreatureEntity)
+        if (entity instanceof PathfinderMob)
         {
-            ((CreatureEntity) entity).getNavigation().stop();
+            ((PathfinderMob) entity).getNavigation().stop();
         }
     }
 }

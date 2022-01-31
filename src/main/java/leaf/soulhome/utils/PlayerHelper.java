@@ -5,25 +5,26 @@
 package leaf.soulhome.utils;
 
 import com.mojang.authlib.GameProfile;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 
+import java.util.Optional;
 import java.util.UUID;
 
-import static net.minecraft.entity.player.PlayerEntity.PERSISTED_NBT_TAG;
+import static net.minecraft.world.entity.player.Player.PERSISTED_NBT_TAG;
 
 public class PlayerHelper
 {
-    public static String getPlayerName(UUID id, MinecraftServer server)
+public static String getPlayerName(UUID id, MinecraftServer server)
     {
-        GameProfile profileByUUID = server.getProfileCache().get(id);
-        return profileByUUID != null ? profileByUUID.getName() : "OFFLINE Player";
+        Optional<GameProfile> profileByUUID = server.getProfileCache().get(id);
+        return profileByUUID.isPresent() ? profileByUUID.get().getName() : "OFFLINE Player";
     }
 
-    public static CompoundNBT getPersistentTag(PlayerEntity playerEntity, String tag)
+    public static CompoundTag getPersistentTag(Player playerEntity, String tag)
     {
-        CompoundNBT persistentNBT = CompoundNBTHelper.getOrCreateTag(playerEntity.getPersistentData(), PERSISTED_NBT_TAG);
+        CompoundTag persistentNBT = CompoundNBTHelper.getOrCreateTag(playerEntity.getPersistentData(), PERSISTED_NBT_TAG);
         return CompoundNBTHelper.getOrCreateTag(persistentNBT, tag);
     }
 }

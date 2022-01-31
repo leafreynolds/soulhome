@@ -6,12 +6,12 @@ package leaf.soulhome.items;
 
 import leaf.soulhome.SoulHome;
 import leaf.soulhome.registry.ItemsRegistry;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 
 public class SoulHomeItemGroups
 {
-    public static ItemGroup ITEMS = new ItemGroup(SoulHome.MODID + ".items")
+    public static CreativeModeTab ITEMS = new CreativeModeTab(SoulHome.MODID + ".items")
     {
         @Override
         public ItemStack makeIcon()

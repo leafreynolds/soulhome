@@ -4,7 +4,7 @@
 
 package leaf.soulhome.blocks;
 
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 
 public class TileBlock extends Block
 {

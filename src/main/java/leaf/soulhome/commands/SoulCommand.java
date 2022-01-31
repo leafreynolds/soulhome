@@ -12,14 +12,14 @@ import com.mojang.brigadier.CommandDispatcher;
 import leaf.soulhome.SoulHome;
 import leaf.soulhome.commands.subcommands.SoulHomeCommand;
 import leaf.soulhome.commands.subcommands.TestCommand;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 
 
 public class SoulCommand
 {
 
-    public static void register(CommandDispatcher<CommandSource> dispatcher)
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
     {
         dispatcher.register(Commands.literal(SoulHome.MODID)
                 .then(TestCommand.register(dispatcher))

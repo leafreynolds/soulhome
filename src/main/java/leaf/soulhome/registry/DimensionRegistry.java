@@ -12,24 +12,24 @@ import leaf.soulhome.network.Network;
 import leaf.soulhome.network.SyncDimensionListMessage;
 import leaf.soulhome.utils.DimensionHelper;
 import leaf.soulhome.utils.LogHelper;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.DynamicRegistries;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.Dimension;
-import net.minecraft.world.DimensionType;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeManager;
-import net.minecraft.world.border.IBorderListener;
-import net.minecraft.world.chunk.listener.IChunkStatusListener;
-import net.minecraft.world.gen.DimensionSettings;
-import net.minecraft.world.gen.settings.DimensionGeneratorSettings;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.DerivedWorldInfo;
-import net.minecraft.world.storage.IServerConfiguration;
-import net.minecraft.world.storage.SaveFormat;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.Registry;
+import net.minecraft.world.level.dimension.LevelStem;
+import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.BiomeManager;
+import net.minecraft.world.level.border.BorderChangeListener;
+import net.minecraft.server.level.progress.ChunkProgressListener;
+import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
+import net.minecraft.world.level.levelgen.WorldGenSettings;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.storage.DerivedLevelData;
+import net.minecraft.world.level.storage.WorldData;
+import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
 
@@ -41,16 +41,16 @@ public class DimensionRegistry
 {
 
 
-    public static RegistryKey<DimensionSettings> DIMENSION_NOISE_SETTINGS;
+    public static ResourceKey<NoiseGeneratorSettings> DIMENSION_NOISE_SETTINGS;
 
     public static class DimensionTypes
     {
-        public static final RegistryKey<DimensionType> SOUL_DIMENSION_TYPE = RegistryKey.create(Registry.DIMENSION_TYPE_REGISTRY, SoulHome.SOULHOME_LOC);
+        public static final ResourceKey<DimensionType> SOUL_DIMENSION_TYPE = ResourceKey.create(Registry.DIMENSION_TYPE_REGISTRY, SoulHome.SOULHOME_LOC);
     }
 
     public static void registerNoiseSettings()
     {
-        DIMENSION_NOISE_SETTINGS = RegistryKey.create(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY, SoulHome.SOULHOME_LOC);
+        DIMENSION_NOISE_SETTINGS = ResourceKey.create(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY, SoulHome.SOULHOME_LOC);
     }
 
     public static void registerChunkGenerators()
@@ -58,11 +58,11 @@ public class DimensionRegistry
         Registry.register(Registry.CHUNK_GENERATOR, SoulHome.SOULHOME_LOC, SoulChunkGenerator.providerCodec);
     }
 
-    public static Dimension soulDimensionBuilder(MinecraftServer server, RegistryKey<Dimension> dimensionKey)
+    public static LevelStem soulDimensionBuilder(MinecraftServer server, ResourceKey<LevelStem> dimensionKey)
     {
-        DynamicRegistries registries = server.registryAccess();
+        RegistryAccess registries = server.registryAccess();
 
-        return new Dimension(
+        return new LevelStem(
                 () ->
                 {
                     try
@@ -82,21 +82,21 @@ public class DimensionRegistry
     // Once a dimension is created using this method, it will load automatically on server boot
     // Special thanks to the NewTardisMod team. This would have been a nightmare to figure out
     // https://gitlab.com/Spectre0987/TardisMod-1-14/-/tree/1.16
-    public static ServerWorld createSoulDimension(MinecraftServer server, RegistryKey<World> worldKey)
+    public static ServerLevel createSoulDimension(MinecraftServer server, ResourceKey<Level> worldKey)
     {
-        RegistryKey<Dimension> dimensionKey = RegistryKey.create(Registry.LEVEL_STEM_REGISTRY, worldKey.location());
+        ResourceKey<LevelStem> dimensionKey = ResourceKey.create(Registry.LEVEL_STEM_REGISTRY, worldKey.location());
 
-        BiFunction<MinecraftServer, RegistryKey<Dimension>, Dimension> dimensionFactory = DimensionRegistry::soulDimensionBuilder;
-        Dimension dimension = dimensionFactory.apply(server, dimensionKey);
+        BiFunction<MinecraftServer, ResourceKey<LevelStem>, LevelStem> dimensionFactory = DimensionRegistry::soulDimensionBuilder;
+        LevelStem dimension = dimensionFactory.apply(server, dimensionKey);
 
         // Refer to META-INF/accesstransformer.cfg here for changing private fields to public
         Executor executor = server.executor;
-        SaveFormat.LevelSave levelSave = server.storageSource;
-        IChunkStatusListener chunkStatusListener = server.progressListenerFactory.create(11);
+        LevelStorageSource.LevelStorageAccess levelSave = server.storageSource;
+        ChunkProgressListener chunkStatusListener = server.progressListenerFactory.create(11);
 
         //configs
-        IServerConfiguration serverConfiguration = server.getWorldData();
-        DimensionGeneratorSettings dimensionGeneratorSettings = serverConfiguration.worldGenSettings();
+        WorldData serverConfiguration = server.getWorldData();
+        WorldGenSettings dimensionGeneratorSettings = serverConfiguration.worldGenSettings();
 
 
         // register the dimension
@@ -108,9 +108,9 @@ public class DimensionRegistry
 
         //base the world info on overworld? Not actually sure if that's what I want for soul dimensions
         //todo revisit this later. Don't just forget about it.
-        DerivedWorldInfo derivedWorldInfo = new DerivedWorldInfo(serverConfiguration, serverConfiguration.overworldData());
+        DerivedLevelData derivedWorldInfo = new DerivedLevelData(serverConfiguration, serverConfiguration.overworldData());
 
-        ServerWorld newSoulWorld = new ServerWorld(
+        ServerLevel newSoulWorld = new ServerLevel(
                 server,
                 executor,
                 levelSave,
@@ -127,13 +127,13 @@ public class DimensionRegistry
         // pay attention to borders?
         // why do we link the soul world borders to the over world borders?
         // todo ask whether this is actually needed
-        server.getLevel(World.OVERWORLD).getWorldBorder().addListener(new IBorderListener.Impl(newSoulWorld.getWorldBorder()));
+        server.getLevel(Level.OVERWORLD).getWorldBorder().addListener(new BorderChangeListener.DelegateBorderChangeListener(newSoulWorld.getWorldBorder()));
 
         // add the new dimension to the map, so that it auto loads on server boot.
         // forgeGetWorldMap is marked as deprecated because you can
         // screw up a lot of things if you mess with this map.
         // So be very very careful when touching it.
-        Map<RegistryKey<World>, ServerWorld> map = server.forgeGetWorldMap();
+        Map<ResourceKey<Level>, ServerLevel> map = server.forgeGetWorldMap();
         map.put(worldKey, newSoulWorld);
 
         // increment forge worldArrayMarker, so that the world will tick()

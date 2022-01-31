@@ -5,24 +5,24 @@
 package leaf.soulhome.registry;
 
 import leaf.soulhome.SoulHome;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeMaker;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.data.worldgen.biome.OverworldBiomes;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.Registry;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class BiomeRegistry
 {
-    public static RegistryKey<Biome> SOUL_BIOME_KEY;
+    public static ResourceKey<Biome> SOUL_BIOME_KEY;
     public static final DeferredRegister<Biome> BIOMES = DeferredRegister.create(ForgeRegistries.BIOMES, SoulHome.MODID);
-    public static final RegistryObject<Biome> SOUL_BIOME = BIOMES.register(SoulHome.MODID, () -> BiomeMaker.plainsBiome(false));
+    public static final RegistryObject<Biome> SOUL_BIOME = BIOMES.register(SoulHome.MODID, () -> OverworldBiomes.plains(false,false,false));
 
 
     public static void registerBiomeKeys()
     {
-        SOUL_BIOME_KEY = RegistryKey.create(Registry.BIOME_REGISTRY, SoulHome.SOULHOME_LOC);
+        SOUL_BIOME_KEY = ResourceKey.create(Registry.BIOME_REGISTRY, SoulHome.SOULHOME_LOC);
     }
 
 }

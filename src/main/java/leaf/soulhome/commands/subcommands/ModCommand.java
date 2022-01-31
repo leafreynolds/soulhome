@@ -6,9 +6,9 @@ package leaf.soulhome.commands.subcommands;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.command.CommandSource;
+import net.minecraft.commands.CommandSourceStack;
 
-public abstract class ModCommand implements Command<CommandSource>
+public abstract class ModCommand implements Command<CommandSourceStack>
 {
     private int permLevel = 2;
 
@@ -21,7 +21,7 @@ public abstract class ModCommand implements Command<CommandSource>
         this.permLevel = level;
     }
 
-    public boolean canExecute(CommandSource source) throws CommandSyntaxException
+    public boolean canExecute(CommandSourceStack source) throws CommandSyntaxException
     {
         return source.hasPermission(permLevel);
     }

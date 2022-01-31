@@ -4,23 +4,23 @@
 
 package leaf.soulhome.registry;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.IDataSerializer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.resources.ResourceLocation;
 
 public class DataSerializersRegistry
 {
-    public static final IDataSerializer<ResourceLocation> RESOURCE_LOCATION = new IDataSerializer<ResourceLocation>()
+    public static final EntityDataSerializer<ResourceLocation> RESOURCE_LOCATION = new EntityDataSerializer<ResourceLocation>()
     {
 
         @Override
-        public void write(PacketBuffer buf, ResourceLocation value)
+        public void write(FriendlyByteBuf buf, ResourceLocation value)
         {
             buf.writeResourceLocation(value);
         }
 
-        public ResourceLocation read(PacketBuffer buf)
+        public ResourceLocation read(FriendlyByteBuf buf)
         {
             return buf.readResourceLocation();
         }
@@ -34,7 +34,7 @@ public class DataSerializersRegistry
 
     public static void register()
     {
-        DataSerializers.registerSerializer(RESOURCE_LOCATION);
+        EntityDataSerializers.registerSerializer(RESOURCE_LOCATION);
     }
 
 }

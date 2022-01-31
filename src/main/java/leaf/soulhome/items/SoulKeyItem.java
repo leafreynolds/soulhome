@@ -4,37 +4,28 @@
 
 package leaf.soulhome.items;
 
-import leaf.soulhome.compat.curios.CuriosCompat;
-import leaf.soulhome.compat.curios.SoulHomeCurios;
 import leaf.soulhome.constants.Constants;
 import leaf.soulhome.properties.PropTypes;
 import leaf.soulhome.utils.DimensionHelper;
 import leaf.soulhome.utils.MathUtils;
 import leaf.soulhome.utils.TextHelper;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Rarity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.util.Mth;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
-import top.theillusivec4.curios.api.CuriosCapability;
-import top.theillusivec4.curios.api.type.capability.ICurio;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -51,7 +42,7 @@ public class SoulKeyItem extends BaseItem
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
+    public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn)
     {
         tooltip.add(TextHelper.createTranslatedText(Constants.StringKeys.KEY_SOUL_CHARGE));
     }
@@ -64,27 +55,27 @@ public class SoulKeyItem extends BaseItem
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
+    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn)
     {
         ItemStack stack = playerIn.getItemInHand(handIn);
-        if (playerIn instanceof ServerPlayerEntity)
+        if (playerIn instanceof ServerPlayer)
         {
-            ServerPlayerEntity player = (ServerPlayerEntity) playerIn;
+            ServerPlayer player = (ServerPlayer) playerIn;
             player.startUsingItem(handIn);
         }
-        return new ActionResult<>(ActionResultType.SUCCESS, stack);
+        return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
     }
 
     @Nonnull
     @Override
-    public ItemStack finishUsingItem(ItemStack stack, World world, LivingEntity livingEntity)
+    public ItemStack finishUsingItem(ItemStack stack, Level world, LivingEntity livingEntity)
     {
-        if (!livingEntity.level.isClientSide && livingEntity instanceof PlayerEntity)
+        if (!livingEntity.level.isClientSide && livingEntity instanceof Player)
         {
             //find all creatures in range
-            AxisAlignedBB areaOfEffect = new AxisAlignedBB(livingEntity.blockPosition()).inflate(2.5d);
+            AABB areaOfEffect = new AABB(livingEntity.blockPosition()).inflate(2.5d);
             List<Entity> entitiesInRange = world.getEntitiesOfClass(Entity.class, areaOfEffect);
-            DimensionHelper.FlipDimension((PlayerEntity) livingEntity, livingEntity.getServer(), entitiesInRange);
+            DimensionHelper.FlipDimension((Player) livingEntity, livingEntity.getServer(), entitiesInRange);
         }
 
         return stack;
@@ -92,12 +83,12 @@ public class SoulKeyItem extends BaseItem
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void onUseTick(World world, LivingEntity livingEntity, ItemStack stack, int count)
+    public void onUseTick(Level world, LivingEntity livingEntity, ItemStack stack, int count)
     {
         if (livingEntity.level.isClientSide)
         {
             float percentage = MathUtils.clamp01((USE_TICKS_REQUIRED - count) / (float) USE_TICKS_REQUIRED);
-            int particlesToCreate = MathHelper.floor((percentage * percentage * percentage) * USE_TICKS_REQUIRED);
+            int particlesToCreate = Mth.floor((percentage * percentage * percentage) * USE_TICKS_REQUIRED);
 
             final float maxRadius = 5;
             float bits = 360f / particlesToCreate;
@@ -109,9 +100,9 @@ public class SoulKeyItem extends BaseItem
 
                 livingEntity.level.addParticle(
                         ParticleTypes.POOF,
-                        livingEntity.getX() + MathHelper.sin(MathHelper.wrapDegrees(ang)) * radius,
+                        livingEntity.getX() + Mth.sin(Mth.wrapDegrees(ang)) * radius,
                         livingEntity.getY(),
-                        livingEntity.getZ() + MathHelper.cos(MathHelper.wrapDegrees(ang)) * radius,
+                        livingEntity.getZ() + Mth.cos(Mth.wrapDegrees(ang)) * radius,
                         0.0D,
                         0.0D,
                         0.0D);
@@ -133,26 +124,4 @@ public class SoulKeyItem extends BaseItem
     }
 //endregion
 
-//region Curio capability stuff. Only used if curios is installed.
-    @Nullable
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt)
-    {
-        if (CuriosCompat.CuriosIsPresent())
-        {
-            return new ICapabilityProvider()
-            {
-                final LazyOptional<ICurio> curio = LazyOptional.of(SoulHomeCurios::createKeyCurioProvider);
-
-                @Nonnull
-                @Override
-                public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction side)
-                {
-                    return CuriosCapability.ITEM.orEmpty(capability, curio);
-                }
-            };
-        }
-        return null;
-    }
-//endregion
 }

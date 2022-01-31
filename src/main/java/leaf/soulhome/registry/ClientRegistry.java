@@ -7,8 +7,8 @@ package leaf.soulhome.registry;
 import leaf.soulhome.SoulHome;
 import leaf.soulhome.dimensions.SoulDimensionRenderInfo;
 import leaf.soulhome.utils.ResourceLocationHelper;
-import net.minecraft.client.world.DimensionRenderInfo;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.DimensionSpecialEffects;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -22,6 +22,6 @@ public class ClientRegistry
     @SubscribeEvent
     public static void register(FMLClientSetupEvent event)
     {
-        DimensionRenderInfo.EFFECTS.put(SOUL_SKY_PROPERTY_LOC, new SoulDimensionRenderInfo());
+        DimensionSpecialEffects.EFFECTS.put(SOUL_SKY_PROPERTY_LOC, new SoulDimensionRenderInfo());
     }
 }

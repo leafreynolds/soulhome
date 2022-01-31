@@ -6,7 +6,9 @@ package leaf.soulhome.items;
 
 
 import leaf.soulhome.properties.PropTypes;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
+
+import net.minecraft.world.item.Item.Properties;
 
 public class BaseItem extends Item
 {

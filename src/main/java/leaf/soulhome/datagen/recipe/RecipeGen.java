@@ -4,22 +4,25 @@
 
 package leaf.soulhome.datagen.recipe;
 
-import leaf.soulhome.SoulHome;
 import leaf.soulhome.registry.ItemsRegistry;
 import leaf.soulhome.utils.ResourceLocationHelper;
-import net.minecraft.block.Blocks;
 import net.minecraft.data.*;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
 
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
+
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 
 public class RecipeGen extends RecipeProvider implements IConditionBuilder
 {
@@ -29,9 +32,8 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
     }
 
     @Override
-    protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer)
+    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer)
     {
-
         //example recipes obtained from following website on 3rd April '21. Thank you ChampionAsh5357!
         //https://github.com/ChampionAsh5357/1.16.x-Minecraft-Tutorial/blob/1.16.1-32.0.61-web/src/main/java/io/github/championash5357/tutorial/data/TutorialRecipeProvider.java
 
@@ -63,7 +65,7 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
     }
 
 
-    protected static void addBasicArmorRecipes(Consumer<IFinishedRecipe> consumer, ITag<Item> inputMaterial, @Nullable Item head, @Nullable Item chest, @Nullable Item legs, @Nullable Item feet)
+    protected static void addBasicArmorRecipes(Consumer<FinishedRecipe> consumer, Tag<Item> inputMaterial, @Nullable Item head, @Nullable Item chest, @Nullable Item legs, @Nullable Item feet)
     {
         if (head != null)
         {
@@ -83,7 +85,7 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
         }
     }
 
-    private void decompressRecipe(Consumer<IFinishedRecipe> consumer, IItemProvider output, ITag<Item> input, String name)
+    private void decompressRecipe(Consumer<FinishedRecipe> consumer, ItemLike output, Tag<Item> input, String name)
     {
         ShapelessRecipeBuilder.shapeless(output, 9)
                 .unlockedBy("has_item", has(output))
@@ -91,7 +93,7 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
                 .save(consumer, ResourceLocationHelper.prefix("conversions/" + name));
     }
 
-    private ShapedRecipeBuilder compressRecipe(IItemProvider output, ITag<Item> input)
+    private ShapedRecipeBuilder compressRecipe(ItemLike output, Tag<Item> input)
     {
         return ShapedRecipeBuilder.shaped(output)
                 .define('I', input)
@@ -101,19 +103,19 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
                 .unlockedBy("has_item", has(input));
     }
 
-    protected static void addOreSmeltingRecipes(Consumer<IFinishedRecipe> consumer, IItemProvider ore, Item result, float experience, int time)
+    protected static void addOreSmeltingRecipes(Consumer<FinishedRecipe> consumer, ItemLike ore, Item result, float experience, int time)
     {
         String name = result.getRegistryName().getPath();
         String path = ore.asItem().getRegistryName().getPath();
-        CookingRecipeBuilder.smelting(Ingredient.of(ore), result, experience, time).unlockedBy("has_ore", has(ore)).save(consumer, ResourceLocationHelper.prefix(name + "_from_smelting_" + path));
-        CookingRecipeBuilder.blasting(Ingredient.of(ore), result, experience, time / 2).unlockedBy("has_ore", has(ore)).save(consumer, ResourceLocationHelper.prefix(name + "_from_blasting_" + path));
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(ore), result, experience, time).unlockedBy("has_ore", has(ore)).save(consumer, ResourceLocationHelper.prefix(name + "_from_smelting_" + path));
+        SimpleCookingRecipeBuilder.blasting(Ingredient.of(ore), result, experience, time / 2).unlockedBy("has_ore", has(ore)).save(consumer, ResourceLocationHelper.prefix(name + "_from_blasting_" + path));
     }
 
-    protected static void addCookingRecipes(Consumer<IFinishedRecipe> consumer, IItemProvider inputItem, Item result, float experience, int time)
+    protected static void addCookingRecipes(Consumer<FinishedRecipe> consumer, ItemLike inputItem, Item result, float experience, int time)
     {
         String name = result.getRegistryName().getPath();
-        CookingRecipeBuilder.smelting(Ingredient.of(inputItem), result, experience, time).unlockedBy("has_item", has(inputItem)).save(consumer, ResourceLocationHelper.prefix(name + "_from_smelting"));
-        CookingRecipeBuilder.cooking(Ingredient.of(inputItem), result, experience, time / 2, IRecipeSerializer.SMOKING_RECIPE).unlockedBy("has_item", has(inputItem)).save(consumer, ResourceLocationHelper.prefix(name + "_from_smoking"));
-        CookingRecipeBuilder.cooking(Ingredient.of(inputItem), result, experience, time, IRecipeSerializer.CAMPFIRE_COOKING_RECIPE).unlockedBy("has_item", has(inputItem)).save(consumer, ResourceLocationHelper.prefix(name + "_from_campfire"));
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(inputItem), result, experience, time).unlockedBy("has_item", has(inputItem)).save(consumer, ResourceLocationHelper.prefix(name + "_from_smelting"));
+        SimpleCookingRecipeBuilder.cooking(Ingredient.of(inputItem), result, experience, time / 2, RecipeSerializer.SMOKING_RECIPE).unlockedBy("has_item", has(inputItem)).save(consumer, ResourceLocationHelper.prefix(name + "_from_smoking"));
+        SimpleCookingRecipeBuilder.cooking(Ingredient.of(inputItem), result, experience, time, RecipeSerializer.CAMPFIRE_COOKING_RECIPE).unlockedBy("has_item", has(inputItem)).save(consumer, ResourceLocationHelper.prefix(name + "_from_campfire"));
     }
 }

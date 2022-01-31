@@ -15,9 +15,9 @@ import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 @JeiPlugin
 public class JEICompat implements IModPlugin
@@ -63,10 +63,10 @@ public class JEICompat implements IModPlugin
 
     private void addItemInfoPage(IRecipeRegistration reg, Item item)
     {
-        reg.addIngredientInfo(
-                new ItemStack(item),
-                VanillaTypes.ITEM,
-                String.format(Constants.StringKeys.SOULHOME_ITEM_TOOLTIP, item.getRegistryName().getPath()));
+        //reg.addIngredientInfo(
+        //        new ItemStack(item),
+        //        VanillaTypes.ITEM,
+        //        String.format(Constants.StringKeys.SOULHOME_ITEM_TOOLTIP, item.getRegistryName().getPath()));
     }
 
 }

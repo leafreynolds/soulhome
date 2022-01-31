@@ -11,22 +11,23 @@ package leaf.soulhome.registry;
 import leaf.soulhome.SoulHome;
 import leaf.soulhome.items.GuideItem;
 import leaf.soulhome.items.SoulKeyItem;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 
 public class ItemsRegistry
 {
-    public static final DeferredRegister<net.minecraft.item.Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, SoulHome.MODID);
+    public static final DeferredRegister<net.minecraft.world.item.Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, SoulHome.MODID);
 
     //other items
 
-    public static final RegistryObject<net.minecraft.item.Item> SOUL_KEY = ITEMS.register("soulkey", () -> createItem(new SoulKeyItem()));
-    public static final RegistryObject<net.minecraft.item.Item> GUIDE = ITEMS.register("guide", () -> createItem(new GuideItem()));
+    public static final RegistryObject<Item> SOUL_KEY = ITEMS.register("soulkey", () -> createItem(new SoulKeyItem()));
+    public static final RegistryObject<net.minecraft.world.item.Item> GUIDE = ITEMS.register("guide", () -> createItem(new GuideItem()));
 
 
-    private static <T extends net.minecraft.item.Item> T createItem(T item)
+    private static <T extends net.minecraft.world.item.Item> T createItem(T item)
     {
         return item;
     }

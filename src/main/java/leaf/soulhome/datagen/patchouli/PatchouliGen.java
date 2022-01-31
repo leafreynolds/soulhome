@@ -10,8 +10,8 @@ import com.google.gson.GsonBuilder;
 import leaf.soulhome.datagen.patchouli.categories.PatchouliBasics;
 import leaf.soulhome.datagen.patchouli.categories.PatchouliMultiblocks;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
-import net.minecraft.data.IDataProvider;
+import net.minecraft.data.HashCache;
+import net.minecraft.data.DataProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,7 +25,7 @@ import java.util.function.Consumer;
 //
 //  In-Game Documentation generator
 //
-public class PatchouliGen implements IDataProvider
+public class PatchouliGen implements DataProvider
 {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -44,7 +44,7 @@ public class PatchouliGen implements IDataProvider
     /**
      * Performs this provider's action.
      */
-    public void run(DirectoryCache cache) throws IOException
+    public void run(HashCache cache) throws IOException
     {
         Path path = this.generator.getOutputFolder();
         Set<String> entryIDs = Sets.newHashSet();
@@ -90,7 +90,7 @@ public class PatchouliGen implements IDataProvider
 
     }
 
-    private Consumer<BookStuff.Category> getCategoryConsumer(DirectoryCache cache, Path path, Set<String> categoryIDs)
+    private Consumer<BookStuff.Category> getCategoryConsumer(HashCache cache, Path path, Set<String> categoryIDs)
     {
         return category ->
         {
@@ -104,7 +104,7 @@ public class PatchouliGen implements IDataProvider
 
                 try
                 {
-                    IDataProvider.save(GSON, cache, category.serialize(), path1);
+                    DataProvider.save(GSON, cache, category.serialize(), path1);
                 } catch (IOException ioexception)
                 {
                     LOGGER.error("Couldn't save page {}", path1, ioexception);
@@ -114,7 +114,7 @@ public class PatchouliGen implements IDataProvider
         };
     }
 
-    private Consumer<BookStuff.Entry> getEntryConsumer(DirectoryCache cache, Path path, Set<String> entryIDs)
+    private Consumer<BookStuff.Entry> getEntryConsumer(HashCache cache, Path path, Set<String> entryIDs)
     {
         return entry ->
         {
@@ -128,7 +128,7 @@ public class PatchouliGen implements IDataProvider
 
                 try
                 {
-                    IDataProvider.save(GSON, cache, entry.serialize(), path1);
+                    DataProvider.save(GSON, cache, entry.serialize(), path1);
                 } catch (IOException ioexception)
                 {
                     LOGGER.error("Couldn't save page {}", path1, ioexception);

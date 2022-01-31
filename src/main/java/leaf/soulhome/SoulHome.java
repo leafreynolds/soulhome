@@ -4,17 +4,15 @@
 
 package leaf.soulhome;
 
-import leaf.soulhome.compat.curios.CuriosCompat;
 import leaf.soulhome.compat.patchouli.PatchouliCompat;
 import leaf.soulhome.network.Network;
 import leaf.soulhome.registry.*;
 import leaf.soulhome.utils.LogHelper;
 import leaf.soulhome.utils.ResourceLocationHelper;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -57,7 +55,6 @@ public class SoulHome
         Network.init();
 
         // init cross mod compatibility stuff, if relevant
-        CuriosCompat.init();
         PatchouliCompat.init();
     }
 

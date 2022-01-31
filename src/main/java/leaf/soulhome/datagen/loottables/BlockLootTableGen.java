@@ -5,11 +5,11 @@
 package leaf.soulhome.datagen.loottables;
 
 import leaf.soulhome.registry.BlocksRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.data.loot.BlockLootTables;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.data.loot.BlockLoot;
+import net.minecraftforge.registries.RegistryObject;
 
-public class BlockLootTableGen extends BlockLootTables
+public class BlockLootTableGen extends BlockLoot
 {
     @Override
     protected void addTables()

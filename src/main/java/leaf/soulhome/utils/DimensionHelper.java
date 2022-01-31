@@ -6,20 +6,19 @@ package leaf.soulhome.utils;
 
 import leaf.soulhome.SoulHome;
 import leaf.soulhome.registry.DimensionRegistry;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.DimensionType;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.core.Registry;
+import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +37,7 @@ public class DimensionHelper
         return isDimensionOfType(livingEntity.getCommandSenderWorld(), DimensionRegistry.DimensionTypes.SOUL_DIMENSION_TYPE);
     }
 
-    public static boolean isDimensionOfType(World world, RegistryKey<DimensionType> dimTypeKey)
+    public static boolean isDimensionOfType(Level world, ResourceKey<DimensionType> dimTypeKey)
     {
         // I think it has to be done this way since the soul dimension is not
         // shared between players like it is in random things SpectreKey dimension
@@ -47,18 +46,18 @@ public class DimensionHelper
     }
 
     // move the player to/from their soul dimension
-    public static void FlipDimension(PlayerEntity playerEntity, MinecraftServer server, List<Entity> entitiesInRange)
+    public static void FlipDimension(Player playerEntity, MinecraftServer server, List<Entity> entitiesInRange)
     {
         //get (or create if this is the first time) our little save
-        CompoundNBT soulNBT = PlayerHelper.getPersistentTag(playerEntity, SoulHome.SOULHOME_LOC.toString());
-        ServerWorld destination;
+        CompoundTag soulNBT = PlayerHelper.getPersistentTag(playerEntity, SoulHome.SOULHOME_LOC.toString());
+        ServerLevel destination;
         double x = 0.5d;
         double y = FLOOR_LEVEL + 2;
         double z = 0.5d;
 
         if (entitiesInRange == null)
         {
-            entitiesInRange = new ArrayList<Entity>();
+            entitiesInRange = new ArrayList<>();
             entitiesInRange.add(playerEntity);
         }
 
@@ -66,8 +65,8 @@ public class DimensionHelper
         if (isInSoulDimension(playerEntity))
         {
             //get the dimension key, based on the info we saved.
-            RegistryKey<World> destinationKey =
-                    RegistryKey.create(
+            ResourceKey<Level> destinationKey =
+                    ResourceKey.create(
                             Registry.DIMENSION_REGISTRY,
                             new ResourceLocation(
                                     soulNBT.getString(LAST_DIMENSION_MOD_ID),
@@ -111,9 +110,9 @@ public class DimensionHelper
         {
             //if it's a player entity, save their last dimension position individually.
             //helps them leave another player's soul. Nothing else can leave without help.
-            if (ent instanceof PlayerEntity && !isInSoulDimension((PlayerEntity) ent))
+            if (ent instanceof Player && !isInSoulDimension((Player) ent))
             {
-                soulNBT = PlayerHelper.getPersistentTag((PlayerEntity) ent, SoulHome.SOULHOME_LOC.toString());
+                soulNBT = PlayerHelper.getPersistentTag((Player) ent, SoulHome.SOULHOME_LOC.toString());
                 // XYZ
                 soulNBT.putDouble(LAST_DIMENSION_X, ent.getX());
                 soulNBT.putDouble(LAST_DIMENSION_Y, ent.getY());
@@ -126,8 +125,8 @@ public class DimensionHelper
             }
 
 
-            Vector3d posRelativeToTeleporter = ent.position().subtract(playerEntity.position());
-            Vector3d newPosByDestination = new Vector3d(x,y,z).add(posRelativeToTeleporter);
+            Vec3 posRelativeToTeleporter = ent.position().subtract(playerEntity.position());
+            Vec3 newPosByDestination = new Vec3(x,y,z).add(posRelativeToTeleporter);
 
 
             TeleportHelper.teleportEntity(
@@ -137,11 +136,11 @@ public class DimensionHelper
                     y,
                     newPosByDestination.z,
                     playerEntity.getYHeadRot(),
-                    playerEntity.xRot);
+                    playerEntity.getXRot());
         }
     }
 
-    private static ServerWorld getOrCreateSoulDimension(String userUUID, MinecraftServer server)
+    private static ServerLevel getOrCreateSoulDimension(String userUUID, MinecraftServer server)
     {
         //we use the user's UUID as the dimension ID.
         //There can only be one soul dimension per user
@@ -149,10 +148,10 @@ public class DimensionHelper
 
         //the key used in the map, Map<key,world>
         //if we've already made the dimension, we can grab it straight from server.getLevel
-        RegistryKey<World> worldKey = RegistryKey.create(Registry.DIMENSION_REGISTRY, loc);
+        ResourceKey<Level> worldKey = ResourceKey.create(Registry.DIMENSION_REGISTRY, loc);
 
         //check to find our special dimension
-        ServerWorld soulDimensionForPlayer = server.getLevel(worldKey);
+        ServerLevel soulDimensionForPlayer = server.getLevel(worldKey);
 
         return soulDimensionForPlayer != null
                ? soulDimensionForPlayer // Found it! return it. Otherwise make a new one

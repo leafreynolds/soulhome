@@ -5,9 +5,9 @@
 
 package leaf.soulhome.utils;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.ListTag;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -19,57 +19,57 @@ public final class CompoundNBTHelper
     private static final int[] EMPTY_INT_ARRAY = new int[0];
 
 
-    public static void set(CompoundNBT compoundTag, String tag, INBT nbt)
+    public static void set(CompoundTag compoundTag, String tag, Tag nbt)
     {
         compoundTag.put(tag, nbt);
     }
 
-    public static void setBoolean(CompoundNBT compoundTag, String tag, boolean b)
+    public static void setBoolean(CompoundTag compoundTag, String tag, boolean b)
     {
         compoundTag.putBoolean(tag, b);
     }
 
-    public static void setByte(CompoundNBT compoundTag, String tag, byte b)
+    public static void setByte(CompoundTag compoundTag, String tag, byte b)
     {
         compoundTag.putByte(tag, b);
     }
 
-    public static void setShort(CompoundNBT compoundTag, String tag, short s)
+    public static void setShort(CompoundTag compoundTag, String tag, short s)
     {
         compoundTag.putShort(tag, s);
     }
 
-    public static void setInt(CompoundNBT compoundTag, String tag, int i)
+    public static void setInt(CompoundTag compoundTag, String tag, int i)
     {
         compoundTag.putInt(tag, i);
     }
 
-    public static void setIntArray(CompoundNBT compoundTag, String tag, int[] val)
+    public static void setIntArray(CompoundTag compoundTag, String tag, int[] val)
     {
         compoundTag.putIntArray(tag, val);
     }
 
-    public static void setIntArray(CompoundNBT compoundTag, String tag, List<Integer> val)
+    public static void setIntArray(CompoundTag compoundTag, String tag, List<Integer> val)
     {
         compoundTag.putIntArray(tag, val);
     }
 
-    public static void setLong(CompoundNBT compoundTag, String tag, long l)
+    public static void setLong(CompoundTag compoundTag, String tag, long l)
     {
         compoundTag.putLong(tag, l);
     }
 
-    public static void setFloat(CompoundNBT compoundTag, String tag, float f)
+    public static void setFloat(CompoundTag compoundTag, String tag, float f)
     {
         compoundTag.putFloat(tag, f);
     }
 
-    public static void setDouble(CompoundNBT compoundTag, String tag, double d)
+    public static void setDouble(CompoundTag compoundTag, String tag, double d)
     {
         compoundTag.putDouble(tag, d);
     }
 
-    public static void setCompound(CompoundNBT compoundTag, String tag, CompoundNBT cmp)
+    public static void setCompound(CompoundTag compoundTag, String tag, CompoundTag cmp)
     {
         if (!tag.equalsIgnoreCase("ench")) // not override the enchantments
         {
@@ -77,75 +77,75 @@ public final class CompoundNBTHelper
         }
     }
 
-    public static void setString(CompoundNBT compoundTag, String tag, String s)
+    public static void setString(CompoundTag compoundTag, String tag, String s)
     {
         compoundTag.putString(tag, s);
     }
 
-    public static void setUuid(CompoundNBT compoundTag, String tag, UUID value)
+    public static void setUuid(CompoundTag compoundTag, String tag, UUID value)
     {
         compoundTag.putUUID(tag, value);
     }
 
-    public static void setList(CompoundNBT compoundTag, String tag, ListNBT list)
+    public static void setList(CompoundTag compoundTag, String tag, ListTag list)
     {
         compoundTag.put(tag, list);
     }
 
-    public static void removeEntry(CompoundNBT compoundTag, String tag)
+    public static void removeEntry(CompoundTag compoundTag, String tag)
     {
         compoundTag.remove(tag);
     }
 
     // GETTERS
 
-    public static boolean verifyExistance(CompoundNBT compoundTag, String tag)
+    public static boolean verifyExistance(CompoundTag compoundTag, String tag)
     {
         return compoundTag.contains(tag);
     }
 
     @Nullable
-    public static INBT get(CompoundNBT compoundTag, String tag)
+    public static Tag get(CompoundTag compoundTag, String tag)
     {
         return verifyExistance(compoundTag, tag) ? compoundTag.get(tag) : null;
     }
 
-    public static boolean getBoolean(CompoundNBT compoundTag, String tag, boolean defaultExpected)
+    public static boolean getBoolean(CompoundTag compoundTag, String tag, boolean defaultExpected)
     {
         return verifyExistance(compoundTag, tag) ? compoundTag.getBoolean(tag) : defaultExpected;
     }
 
-    public static byte getByte(CompoundNBT compoundTag, String tag, byte defaultExpected)
+    public static byte getByte(CompoundTag compoundTag, String tag, byte defaultExpected)
     {
         return verifyExistance(compoundTag, tag) ? compoundTag.getByte(tag) : defaultExpected;
     }
 
-    public static short getShort(CompoundNBT compoundTag, String tag, short defaultExpected)
+    public static short getShort(CompoundTag compoundTag, String tag, short defaultExpected)
     {
         return verifyExistance(compoundTag, tag) ? compoundTag.getShort(tag) : defaultExpected;
     }
 
-    public static int getInt(CompoundNBT compoundTag, String tag, int defaultExpected)
+    public static int getInt(CompoundTag compoundTag, String tag, int defaultExpected)
     {
         return verifyExistance(compoundTag, tag) ? compoundTag.getInt(tag) : defaultExpected;
     }
 
-    public static int[] getIntArray(CompoundNBT compoundTag, String tag)
+    public static int[] getIntArray(CompoundTag compoundTag, String tag)
     {
         return verifyExistance(compoundTag, tag) ? compoundTag.getIntArray(tag) : EMPTY_INT_ARRAY;
     }
 
-    public static long getLong(CompoundNBT compoundTag, String tag, long defaultExpected)
+    public static long getLong(CompoundTag compoundTag, String tag, long defaultExpected)
     {
         return verifyExistance(compoundTag, tag) ? compoundTag.getLong(tag) : defaultExpected;
     }
 
-    public static float getFloat(CompoundNBT compoundTag, String tag, float defaultExpected)
+    public static float getFloat(CompoundTag compoundTag, String tag, float defaultExpected)
     {
         return verifyExistance(compoundTag, tag) ? compoundTag.getFloat(tag) : defaultExpected;
     }
 
-    public static double getDouble(CompoundNBT compoundTag, String tag, double defaultExpected)
+    public static double getDouble(CompoundTag compoundTag, String tag, double defaultExpected)
     {
         return verifyExistance(compoundTag, tag) ? compoundTag.getDouble(tag) : defaultExpected;
     }
@@ -154,39 +154,39 @@ public final class CompoundNBTHelper
      * If nullifyOnFail is true it'll return null if it doesn't find any
      * compounds, otherwise it'll return a new one.
      **/
-    public static CompoundNBT getCompound(CompoundNBT compoundTag, String tag, boolean nullifyOnFail)
+    public static CompoundTag getCompound(CompoundTag compoundTag, String tag, boolean nullifyOnFail)
     {
         return verifyExistance(compoundTag, tag) ? compoundTag.getCompound(tag)
                                                  : nullifyOnFail ? null
-                                                                 : (CompoundNBT) compoundTag.put(tag, new CompoundNBT());
+                                                                 : (CompoundTag) compoundTag.put(tag, new CompoundTag());
     }
 
-    public static CompoundNBT getOrCreateTag(CompoundNBT compoundTag, String tag)
+    public static CompoundTag getOrCreateTag(CompoundTag compoundTag, String tag)
     {
         if (!verifyExistance(compoundTag, tag))
         {
-            compoundTag.put(tag, new CompoundNBT());
+            compoundTag.put(tag, new CompoundTag());
         }
 
         return compoundTag.getCompound(tag);
     }
 
-    public static String getString(CompoundNBT compoundTag, String tag, String defaultExpected)
+    public static String getString(CompoundTag compoundTag, String tag, String defaultExpected)
     {
         return verifyExistance(compoundTag, tag) ? compoundTag.getString(tag) : defaultExpected;
     }
 
     @Nullable
-    public static UUID getUuid(CompoundNBT compoundTag, String tag)
+    public static UUID getUuid(CompoundTag compoundTag, String tag)
     {
         return verifyExistance(compoundTag, tag + "Most") && verifyExistance(compoundTag, tag + "Least")
                ? compoundTag.getUUID(tag) : null;
     }
 
-    public static ListNBT getList(CompoundNBT compoundTag, String tag, int objtype, boolean nullifyOnFail)
+    public static ListTag getList(CompoundTag compoundTag, String tag, int objtype, boolean nullifyOnFail)
     {
         return verifyExistance(compoundTag, tag) ? compoundTag.getList(tag, objtype)
-                                                 : nullifyOnFail ? null : new ListNBT();
+                                                 : nullifyOnFail ? null : new ListTag();
     }
 
     /**
@@ -195,15 +195,15 @@ public final class CompoundNBTHelper
      * the first elements of target. Empty lists and compounds in the template will match target lists and compounds of
      * any size.
      */
-    public static boolean matchTag(@Nullable INBT template, @Nullable INBT target)
+    public static boolean matchTag(@Nullable Tag template, @Nullable Tag target)
     {
-        if (template instanceof CompoundNBT && target instanceof CompoundNBT)
+        if (template instanceof CompoundTag && target instanceof CompoundTag)
         {
-            return matchTagCompound((CompoundNBT) template, (CompoundNBT) target);
+            return matchTagCompound((CompoundTag) template, (CompoundTag) target);
         }
-        else if (template instanceof ListNBT && target instanceof ListNBT)
+        else if (template instanceof ListTag && target instanceof ListTag)
         {
-            return matchTagList((ListNBT) template, (ListNBT) target);
+            return matchTagList((ListTag) template, (ListTag) target);
         }
         else
         {
@@ -211,7 +211,7 @@ public final class CompoundNBTHelper
         }
     }
 
-    private static boolean matchTagCompound(CompoundNBT template, CompoundNBT target)
+    private static boolean matchTagCompound(CompoundTag template, CompoundTag target)
     {
         if (template.size() > target.size())
         {
@@ -229,7 +229,7 @@ public final class CompoundNBTHelper
         return true;
     }
 
-    private static boolean matchTagList(ListNBT template, ListNBT target)
+    private static boolean matchTagList(ListTag template, ListTag target)
     {
         if (template.size() > target.size())
         {
@@ -247,9 +247,9 @@ public final class CompoundNBTHelper
         return true;
     }
 
-    public static void renameTag(CompoundNBT nbt, String oldName, String newName)
+    public static void renameTag(CompoundTag nbt, String oldName, String newName)
     {
-        INBT tag = nbt.get(oldName);
+        Tag tag = nbt.get(oldName);
         if (tag != null)
         {
             nbt.remove(oldName);
