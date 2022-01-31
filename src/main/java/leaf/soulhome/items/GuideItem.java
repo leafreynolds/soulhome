@@ -12,14 +12,12 @@ import leaf.soulhome.utils.TextHelper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Rarity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -82,12 +80,19 @@ public class GuideItem extends BaseItem
     @Override
     public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
     {
-        ItemStack stack = playerIn.getItemInHand(handIn);
 
+        ItemStack stack = playerIn.getItemInHand(handIn);
         if (playerIn instanceof ServerPlayerEntity)
         {
-            ServerPlayerEntity player = (ServerPlayerEntity) playerIn;
-            PatchouliAPI.get().openBookGUI(player, ItemsRegistry.GUIDE.getId());
+            ServerPlayerEntity serverPlayer = (ServerPlayerEntity) playerIn;
+            if (PatchouliCompat.PatchouliIsPresent())
+            {
+                PatchouliAPI.get().openBookGUI(serverPlayer, ItemsRegistry.GUIDE.getId());
+            }
+            else
+            {
+                playerIn.sendMessage(TextHelper.createTranslatedText(Constants.StringKeys.PATCHOULI_NOT_INSTALLED), Util.NIL_UUID);
+            }
         }
 
         return new ActionResult<>(ActionResultType.SUCCESS, stack);
