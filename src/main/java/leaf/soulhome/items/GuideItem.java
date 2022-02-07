@@ -10,7 +10,9 @@ import leaf.soulhome.properties.PropTypes;
 import leaf.soulhome.registry.ItemsRegistry;
 import leaf.soulhome.utils.TextHelper;
 import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -67,7 +69,14 @@ public class GuideItem extends BaseItem
     {
         if (PatchouliCompat.PatchouliIsPresent())
         {
-            return PatchouliAPI.get().getSubtitle(ItemsRegistry.GUIDE.getId());
+            try
+            {
+                return PatchouliAPI.get().getSubtitle(ItemsRegistry.GUIDE.getId());
+            }
+            catch (IllegalArgumentException e)
+            {
+                return new TextComponent("");
+            }
         }
         else
         {
@@ -80,15 +89,18 @@ public class GuideItem extends BaseItem
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn)
     {
         ItemStack stack = playerIn.getItemInHand(handIn);
-        if (PatchouliCompat.PatchouliIsPresent())
+        if (playerIn instanceof ServerPlayer)
         {
-            if (playerIn instanceof ServerPlayer)
+            ServerPlayer serverPlayer = (ServerPlayer) playerIn;
+            if (PatchouliCompat.PatchouliIsPresent())
             {
-                ServerPlayer player = (ServerPlayer) playerIn;
-                PatchouliAPI.get().openBookGUI(player, ItemsRegistry.GUIDE.getId());
+                PatchouliAPI.get().openBookGUI(serverPlayer, ItemsRegistry.GUIDE.getId());
+            }
+            else
+            {
+                playerIn.sendMessage(TextHelper.createTranslatedText(Constants.StringKeys.PATCHOULI_NOT_INSTALLED), Util.NIL_UUID);
             }
         }
-        
         return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
     }
 

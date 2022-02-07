@@ -95,7 +95,7 @@ public class BookStuff
 
             //enforced
             jsonobject.addProperty("name", this.name);
-            jsonobject.addProperty("category", this.category.name);
+            jsonobject.addProperty("category", "soulhome:" + this.category.name);
             jsonobject.addProperty("icon", this.icon);
 
             JsonArray jsonarray = new JsonArray();

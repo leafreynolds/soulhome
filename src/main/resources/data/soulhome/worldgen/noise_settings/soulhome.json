@@ -1,6 +1,11 @@
 {
   "bedrock_roof_position": -2147483648,
   "bedrock_floor_position": 0,
+  "legacy_random_source": false,
+  "noodle_caves_enabled": false,
+  "aquifers_enabled": false,
+  "ore_veins_enabled": false,
+  "noise_caves_enabled": false,
   "sea_level": 63,
   "disable_mob_generation": true,
   "structures": {
@@ -27,6 +32,11 @@
       "size": 0,
       "offset": 0
     },
+    "terrain_shaper": {
+      "offset": 0.0,
+      "factor": 1.0,
+      "jaggedness": 0.0
+    },
     "size_horizontal": 1,
     "min_y": 0,
     "height": 256,
@@ -44,6 +54,12 @@
     "Properties": {
       "level": "0"
     },
-    "Name": "minecraft:water"
+    "Name": "minecraft:air"
+  },
+  "surface_rule": {
+    "result_state": {
+      "Name": "minecraft:air"
+    },
+    "type": "minecraft:block"
   }
 }

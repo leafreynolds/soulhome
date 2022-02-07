@@ -1,6 +1,6 @@
 {
   "name": "entry.soul_key",
-  "category": "category.basics",
+  "category": "soulhome:category.basics",
   "icon": "soulhome:guide",
   "pages": [
     {

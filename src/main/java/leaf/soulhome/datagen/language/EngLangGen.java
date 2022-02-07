@@ -89,6 +89,8 @@ public class EngLangGen extends LanguageProvider
         add(Constants.StringKeys.SHIFT_CONTROL_ITEM_TOOLTIP, "\u00A77Hold \u00A78[\u00A7eShift\u00A78] \u00A77and \u00A78[\u00A7eControl\u00A78]");
         add(Constants.StringKeys.CONTROL_ITEM_TOOLTIP, "\u00A77Hold \u00A78[\u00A7eControl\u00A78]");
 
+        add(Constants.StringKeys.PATCHOULI_NOT_INSTALLED, "Patchouli is not installed");
+
         //Guide book
         add("soulhome.landing", "They say the soul is infinite. They didn't say how empty it was. Fortunately, we can fill it.");
 

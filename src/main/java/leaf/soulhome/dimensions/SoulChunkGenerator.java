@@ -73,7 +73,7 @@ public class SoulChunkGenerator extends ChunkGenerator
     }
 
     @Override
-    public void applyCarvers(WorldGenRegion p_187691_, long p_187692_, BiomeManager p_187693_, StructureFeatureManager p_187694_, ChunkAccess p_187695_, GenerationStep.Carving p_187696_)
+    public void applyCarvers(WorldGenRegion worldGenRegion, long p_187692_, BiomeManager biomeManager, StructureFeatureManager structureFeatureManager, ChunkAccess chunkAccess, GenerationStep.Carving carving)
     {
 
     }
@@ -90,7 +90,7 @@ public class SoulChunkGenerator extends ChunkGenerator
     }
 
     @Override
-    public void spawnOriginalMobs(WorldGenRegion p_230354_1_) {    }
+    public void spawnOriginalMobs(WorldGenRegion worldGenRegion) {    }
 
     @Nullable
     @Override
@@ -100,7 +100,7 @@ public class SoulChunkGenerator extends ChunkGenerator
     }
 
     @Override
-    public void buildSurface(WorldGenRegion p_187697_, StructureFeatureManager p_187698_, ChunkAccess p_187699_)
+    public void buildSurface(WorldGenRegion worldGenRegion, StructureFeatureManager structureFeatureManager, ChunkAccess chunkAccess)
     {
 
     }
@@ -118,9 +118,9 @@ public class SoulChunkGenerator extends ChunkGenerator
     public void createReferences(WorldGenLevel world, StructureFeatureManager structures, ChunkAccess chunk) {    }
 
     @Override
-    public CompletableFuture<ChunkAccess> fillFromNoise(Executor p_187748_, Blender p_187749_, StructureFeatureManager p_187750_, ChunkAccess p_187751_)
+    public CompletableFuture<ChunkAccess> fillFromNoise(Executor executor, Blender blender, StructureFeatureManager structureFeatureManager, ChunkAccess chunkAccess)
     {
-        return null;
+        return CompletableFuture.completedFuture(chunkAccess);
     }
 
     @Override
@@ -136,13 +136,13 @@ public class SoulChunkGenerator extends ChunkGenerator
     }
 
     @Override
-    public int getBaseHeight(int x, int z, Heightmap.Types p_156155_, LevelHeightAccessor p_156156_)
+    public int getBaseHeight(int x, int z, Heightmap.Types heightmapTypes, LevelHeightAccessor levelHeightAccessor)
     {
         return DimensionHelper.FLOOR_LEVEL;
     }
 
     @Override
-    public NoiseColumn getBaseColumn(int x, int z, LevelHeightAccessor p_156152_)
+    public NoiseColumn getBaseColumn(int x, int z, LevelHeightAccessor levelHeightAccessor)
     {
         BlockState[] blockstate = new BlockState[0];
         return new NoiseColumn(0, blockstate);

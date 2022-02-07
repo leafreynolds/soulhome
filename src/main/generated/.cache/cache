@@ -1,4 +1,4 @@
-6c2c626b8c81aaec7fd91bb62401b2fe79088789 assets/soulhome/lang/en_us.json
+d9cfbd3951895f724d266ed41c09df50b658b33f assets/soulhome/lang/en_us.json
 d9bb2941a407fb2be1631319b0360c1d501b682d assets/soulhome/models/item/guide.json
 24ca7242da31f8e5d3a3511153a130555be28b00 assets/soulhome/models/item/soulkey.json
 b5cf06caa15b475d51c28dbc82329ed25d7421ec data/soulhome/advancements/main/blank.json
@@ -10,10 +10,10 @@ b3103094c1e2fb86ca557c8028c91a02505efe46 data/soulhome/advancements/recipes/soul
 6e38f71ed21ac598e33778d8d79c92bcaa9b3f9d data/soulhome/advancements/recipes/soulhome.items/soulkey.json
 c46f503b62dde6e0527a28bdad78cb6fbbe82d6c data/soulhome/patchouli_books/guide/en_us/categories/category.basics.json
 90d07ba3c5302020fe2dacd816296633967a39b6 data/soulhome/patchouli_books/guide/en_us/categories/category.multiblocks.json
-15a38c7962199e70d532bd825f3896884eb3b55a data/soulhome/patchouli_books/guide/en_us/entries/category.basics/entry.guide.json
-de0340acfd039aacc0202965dabfc67670d0fbe7 data/soulhome/patchouli_books/guide/en_us/entries/category.basics/entry.soul.json
-2f8075b36db22fcd3d92a7417feec39b0cf42cb5 data/soulhome/patchouli_books/guide/en_us/entries/category.basics/entry.soul_key.json
-c5228a2e128b4b8aa48d5ff6a7f8da99da2fd142 data/soulhome/patchouli_books/guide/en_us/entries/category.basics/entry.welcome.json
-33aa2b35124ae3110f7edb4e75a48880d60dec31 data/soulhome/patchouli_books/guide/en_us/entries/category.multiblocks/entry.blank.json
+51c694061aaec26c71fe443c8f9b2eb4e3afabc8 data/soulhome/patchouli_books/guide/en_us/entries/category.basics/entry.guide.json
+887c7d57c07445a8f2d5506324abb16b68d2249a data/soulhome/patchouli_books/guide/en_us/entries/category.basics/entry.soul.json
+8224a0d386a04525fade6adfd7553b0689982a22 data/soulhome/patchouli_books/guide/en_us/entries/category.basics/entry.soul_key.json
+9b65f73ab0518fbed778c3ae9cf3a8f72013d956 data/soulhome/patchouli_books/guide/en_us/entries/category.basics/entry.welcome.json
+76149244933f2a72a927e419929e93acfc443f6d data/soulhome/patchouli_books/guide/en_us/entries/category.multiblocks/entry.blank.json
 952e53b33bdad64cbfbad1710234cd8c5f5f2f41 data/soulhome/recipes/guide.json
 17fcafa9fe68413745aa1237895f5918f6cb0412 data/soulhome/recipes/soulkey.json
