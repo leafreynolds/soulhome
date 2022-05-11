@@ -12,24 +12,25 @@ import leaf.soulhome.network.Network;
 import leaf.soulhome.network.SyncDimensionListMessage;
 import leaf.soulhome.utils.DimensionHelper;
 import leaf.soulhome.utils.LogHelper;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.Registry;
-import net.minecraft.world.level.dimension.LevelStem;
-import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.WritableRegistry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.progress.ChunkProgressListener;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.BiomeManager;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.border.BorderChangeListener;
-import net.minecraft.server.level.progress.ChunkProgressListener;
+import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import net.minecraft.world.level.levelgen.WorldGenSettings;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.storage.DerivedLevelData;
-import net.minecraft.world.level.storage.WorldData;
 import net.minecraft.world.level.storage.LevelStorageSource;
+import net.minecraft.world.level.storage.WorldData;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
 
@@ -60,21 +61,9 @@ public class DimensionRegistry
 
     public static LevelStem soulDimensionBuilder(MinecraftServer server, ResourceKey<LevelStem> dimensionKey)
     {
-        RegistryAccess registries = server.registryAccess();
-
+        RegistryAccess registries = server.registryAccess(); // get dynamic registries
         return new LevelStem(
-                () ->
-                {
-                    try
-                    {
-                        return registries.registryOrThrow(Registry.DIMENSION_TYPE_REGISTRY).getOrThrow(DimensionTypes.SOUL_DIMENSION_TYPE);
-                    } catch (Exception e)
-                    {
-                        LogHelper.error(e);
-                    }
-                    return null;
-
-                },
+                registries.registryOrThrow(Registry.DIMENSION_TYPE_REGISTRY).getHolderOrThrow(DimensionTypes.SOUL_DIMENSION_TYPE),
                 new SoulChunkGenerator(server));
     }
 
@@ -98,13 +87,17 @@ public class DimensionRegistry
         WorldData serverConfiguration = server.getWorldData();
         WorldGenSettings dimensionGeneratorSettings = serverConfiguration.worldGenSettings();
 
-
         // register the dimension
-        dimensionGeneratorSettings.dimensions().register(
-                dimensionKey,
-                dimension,
-                Lifecycle.stable() //experimental has issues apparently? Lets avoid that.
-        );
+        Registry<LevelStem> dimensionRegistry = dimensionGeneratorSettings.dimensions();
+        if (dimensionRegistry instanceof WritableRegistry)
+        {
+            final WritableRegistry<LevelStem> writableRegistry = (WritableRegistry<LevelStem>) dimensionRegistry;
+            writableRegistry.register(dimensionKey, dimension, Lifecycle.stable());
+        }
+        else
+        {
+            throw new IllegalStateException("Unable to register dimension '" + dimensionKey.location() + "'! Registry not writable!");
+        }
 
         //base the world info on overworld? Not actually sure if that's what I want for soul dimensions
         //todo revisit this later. Don't just forget about it.
@@ -116,7 +109,7 @@ public class DimensionRegistry
                 levelSave,
                 derivedWorldInfo,
                 worldKey,
-                dimension.type(),
+                dimension.typeHolder(),
                 chunkStatusListener,
                 dimension.generator(),
                 dimensionGeneratorSettings.isDebug(),

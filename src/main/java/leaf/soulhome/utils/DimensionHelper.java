@@ -42,7 +42,7 @@ public class DimensionHelper
         // I think it has to be done this way since the soul dimension is not
         // shared between players like it is in random things SpectreKey dimension
         DimensionType type = world.registryAccess().registryOrThrow(Registry.DIMENSION_TYPE_REGISTRY).get(dimTypeKey);
-        return type != null && type.equalTo(world.dimensionType());
+        return type != null && type.equals(world.dimensionType());
     }
 
     // move the player to/from their soul dimension

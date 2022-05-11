@@ -1,7 +1,7 @@
 {
   "name": "soulhome:soulhome",
   "effects": "soulhome:soul_sky_property",
-  "infiniburn": "minecraft:infiniburn_overworld",
+  "infiniburn": "#minecraft:infiniburn_overworld",
   "min_y": 0,
   "height": 256,
   "logical_height": 256,

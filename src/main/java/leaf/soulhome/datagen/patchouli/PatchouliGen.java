@@ -9,11 +9,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import leaf.soulhome.datagen.patchouli.categories.PatchouliBasics;
 import leaf.soulhome.datagen.patchouli.categories.PatchouliMultiblocks;
+import leaf.soulhome.utils.LogHelper;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.HashCache;
 import net.minecraft.data.DataProvider;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -27,7 +26,6 @@ import java.util.function.Consumer;
 //
 public class PatchouliGen implements DataProvider
 {
-    private static final Logger LOGGER = LogManager.getLogger();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     public static final String GUIDE_NAME = "guide";
     private final DataGenerator generator;
@@ -107,7 +105,7 @@ public class PatchouliGen implements DataProvider
                     DataProvider.save(GSON, cache, category.serialize(), path1);
                 } catch (IOException ioexception)
                 {
-                    LOGGER.error("Couldn't save page {}", path1, ioexception);
+                    LogHelper.LOGGER.error("Couldn't save page {}", path1, ioexception);
                 }
 
             }
@@ -131,7 +129,7 @@ public class PatchouliGen implements DataProvider
                     DataProvider.save(GSON, cache, entry.serialize(), path1);
                 } catch (IOException ioexception)
                 {
-                    LOGGER.error("Couldn't save page {}", path1, ioexception);
+                    LogHelper.LOGGER.error("Couldn't save page {}", path1, ioexception);
                 }
 
             }

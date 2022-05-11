@@ -102,6 +102,7 @@ public class TeleportHelper
                 entity.moveTo(x, y, z, entityYRot, entityXRot);
                 entity.setYHeadRot(entityYRot);
 
+                originalEntity.moveTo(0, -10, 0, entityYRot, entityXRot);
                 currentDimension.removeEntity(originalEntity);
 
                 destinationDimension.addFreshEntity(entity);
