@@ -7,6 +7,7 @@ package leaf.soulhome.items;
 import leaf.soulhome.constants.Constants;
 import leaf.soulhome.properties.PropTypes;
 import leaf.soulhome.utils.DimensionHelper;
+import leaf.soulhome.utils.EntityHelper;
 import leaf.soulhome.utils.MathUtils;
 import leaf.soulhome.utils.TextHelper;
 import net.minecraft.world.item.TooltipFlag;
@@ -75,7 +76,7 @@ public class SoulKeyItem extends BaseItem
             //find all creatures in range
             AABB areaOfEffect = new AABB(livingEntity.blockPosition()).inflate(2.5d);
             List<Entity> entitiesInRange = world.getEntitiesOfClass(Entity.class, areaOfEffect);
-            DimensionHelper.FlipDimension((Player) livingEntity, livingEntity.getServer(), entitiesInRange);
+            DimensionHelper.FlipDimension((Player) livingEntity, livingEntity.getServer(), EntityHelper.getEntitiesInRange(livingEntity,2.5d, true));
         }
 
         return stack;

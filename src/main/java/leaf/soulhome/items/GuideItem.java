@@ -37,27 +37,6 @@ public class GuideItem extends BaseItem
         super(PropTypes.Items.ONE.get().rarity(Rarity.RARE));
     }
 
-    public static boolean isOpen()
-    {
-        return ItemsRegistry.GUIDE.getId().equals(PatchouliAPI.get().getOpenBookGui());
-    }
-
-
-    public static Component getTitle(ItemStack stack)
-    {
-        //botania uses this when they are rendering their book title in the world.
-
-        Component title = stack.getDisplayName();
-
-        String akashicTomeNBT = "akashictome:displayName";
-        if (stack.hasTag() && stack.getTag().contains(akashicTomeNBT))
-        {
-            title = Component.Serializer.fromJson(stack.getTag().getString(akashicTomeNBT));
-        }
-
-        return title;
-    }
-
     @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn)
