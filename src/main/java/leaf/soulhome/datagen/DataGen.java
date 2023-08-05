@@ -7,8 +7,6 @@
 
 package leaf.soulhome.datagen;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import leaf.soulhome.SoulHome;
 import leaf.soulhome.datagen.advancements.AdvancementGen;
 import leaf.soulhome.datagen.blocks.BlockModelsGen;
@@ -19,16 +17,15 @@ import leaf.soulhome.datagen.patchouli.PatchouliGen;
 import leaf.soulhome.datagen.recipe.RecipeGen;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
 @Mod.EventBusSubscriber(modid = SoulHome.MODID, bus = Bus.MOD)
 public class DataGen
 {
 
-    public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     @SubscribeEvent
     public static void onDataGen(GatherDataEvent event)
@@ -36,20 +33,20 @@ public class DataGen
         DataGenerator generator = event.getGenerator();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
-        generator.addProvider(new EngLangGen(generator));
+        generator.addProvider(true, new EngLangGen(generator));
 
         if (!event.includeClient())
         {
             return;
         }
 
-        generator.addProvider(new AdvancementGen(generator));
-        generator.addProvider(new ItemModelsGen(generator, existingFileHelper));
-        generator.addProvider(new BlockModelsGen(generator, existingFileHelper));
-        generator.addProvider(new LootTableGen(generator));
-        generator.addProvider(new RecipeGen(generator));
+        generator.addProvider(true, new AdvancementGen(generator));
+        generator.addProvider(true, new ItemModelsGen(generator, existingFileHelper));
+        generator.addProvider(true, new BlockModelsGen(generator, existingFileHelper));
+        generator.addProvider(true, new LootTableGen(generator));
+        generator.addProvider(true, new RecipeGen(generator));
 
-        generator.addProvider(new PatchouliGen(generator));
+        generator.addProvider(true, new PatchouliGen(generator));
 
     }
 

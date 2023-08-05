@@ -1,7 +1,8 @@
 {
-  "name": "entry.blank",
-  "category": "soulhome:category.multiblocks",
+  "advancement": "soulhome:main/blank",
+  "category": "soulhome:multiblocks",
   "icon": "soulhome:guide",
+  "name": "Blank",
   "pages": [
     {
       "type": "text",
@@ -9,9 +10,8 @@
       "title": "soulhome:guide"
     }
   ],
-  "advancement": "soulhome:main/blank",
   "priority": true,
-  "secret": false,
   "read_by_default": false,
+  "secret": false,
   "sortnum": -10
 }

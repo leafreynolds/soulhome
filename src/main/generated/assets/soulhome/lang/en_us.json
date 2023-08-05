@@ -23,9 +23,9 @@
   "keys.soulhome.main": "SoulHome",
   "soulhome.landing": "They say the soul is infinite. They didn't say how empty it was. Fortunately, we can fill it.",
   "soulhome:soulhome": "SoulHome",
-  "tooltip.item.info.control": "\u00A77Hold \u00A78[\u00A7eControl\u00A78]",
-  "tooltip.item.info.shift": "\u00A77Hold \u00A78[\u00A7eShift\u00A78]",
-  "tooltip.item.info.shift_control": "\u00A77Hold \u00A78[\u00A7eShift\u00A78] \u00A77and \u00A78[\u00A7eControl\u00A78]",
+  "tooltip.item.info.control": "§7Hold §8[§eControl§8]",
+  "tooltip.item.info.shift": "§7Hold §8[§eShift§8]",
+  "tooltip.item.info.shift_control": "§7Hold §8[§eShift§8] §7and §8[§eControl§8]",
   "tooltip.item.soulhome.guide": "If patchouli is installed, this is your guide to the mod",
   "tooltip.item.soulhome.soulkey": "The key to accessing your own soul. Use for the full duration and it will take you there. As well as anything else nearby.",
   "tooltip.soulhome.patchouli.not_installed": "Patchouli is not installed"

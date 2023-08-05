@@ -12,8 +12,9 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import leaf.soulhome.utils.DimensionHelper;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 
 public class SoulHomeCommand extends ModCommand
@@ -33,7 +34,7 @@ public class SoulHomeCommand extends ModCommand
     private static int testSub(CommandContext<CommandSourceStack> context, ServerLevel world)
     {
         CommandSourceStack source = context.getSource();
-        source.sendSuccess(new TranslatableComponent("command.soulhome.test.sub"), true);
+        source.sendSuccess(Component.translatable("command.soulhome.test.sub"), true);
 
         return SINGLE_SUCCESS;
     }

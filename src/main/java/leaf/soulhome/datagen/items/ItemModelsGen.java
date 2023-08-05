@@ -6,6 +6,7 @@ package leaf.soulhome.datagen.items;
 
 import leaf.soulhome.SoulHome;
 import leaf.soulhome.registry.ItemsRegistry;
+import leaf.soulhome.utils.ResourceLocationHelper;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -48,8 +49,8 @@ public class ItemModelsGen extends ItemModelProvider
 
     public String getPath(Supplier<? extends Item> itemSupplier)
     {
-        ResourceLocation location = itemSupplier.get().getRegistryName();
-        return location.getPath();
+        final ResourceLocation registryName = ResourceLocationHelper.get(itemSupplier.get());
+        return registryName.getPath();
     }
 
     public ItemModelBuilder simpleItem(String path, String texturePath)

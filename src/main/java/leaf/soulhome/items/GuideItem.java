@@ -10,9 +10,7 @@ import leaf.soulhome.properties.PropTypes;
 import leaf.soulhome.registry.ItemsRegistry;
 import leaf.soulhome.utils.TextHelper;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -54,7 +52,7 @@ public class GuideItem extends BaseItem
             }
             catch (IllegalArgumentException e)
             {
-                return new TextComponent("");
+                return Component.literal("");
             }
         }
         else
@@ -77,7 +75,7 @@ public class GuideItem extends BaseItem
             }
             else
             {
-                playerIn.sendMessage(TextHelper.createTranslatedText(Constants.StringKeys.PATCHOULI_NOT_INSTALLED), Util.NIL_UUID);
+                playerIn.sendSystemMessage(TextHelper.createTranslatedText(Constants.StringKeys.PATCHOULI_NOT_INSTALLED));
             }
         }
         return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);

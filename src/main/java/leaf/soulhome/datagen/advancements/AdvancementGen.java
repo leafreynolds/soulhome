@@ -9,12 +9,13 @@ import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.minecraft.advancements.Advancement;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.HashCache;
 import net.minecraft.data.DataProvider;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -25,7 +26,6 @@ import java.util.function.Consumer;
 public class AdvancementGen implements DataProvider
 {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
     private final DataGenerator generator;
     private final List<Consumer<Consumer<Advancement>>> advancements = ImmutableList.of(
             new MainAdvancements()
@@ -39,7 +39,7 @@ public class AdvancementGen implements DataProvider
     /**
      * Performs this provider's action.
      */
-    public void run(HashCache cache) throws IOException
+    public void run(@NotNull CachedOutput cache) throws IOException
     {
         Path path = this.generator.getOutputFolder();
         Set<ResourceLocation> set = Sets.newHashSet();
@@ -55,7 +55,7 @@ public class AdvancementGen implements DataProvider
 
                 try
                 {
-                    DataProvider.save(GSON, cache, advancement.deconstruct().serializeToJson(), path1);
+                    DataProvider.saveStable(cache, advancement.deconstruct().serializeToJson(), path1);
                 } catch (IOException ioexception)
                 {
                     LOGGER.error("Couldn't save advancement {}", path1, ioexception);

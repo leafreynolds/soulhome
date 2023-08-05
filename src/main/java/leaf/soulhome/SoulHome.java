@@ -66,7 +66,6 @@ public class SoulHome
             //EntityRegistry.PrepareEntityAttributes();
 
             BiomeRegistry.registerBiomeKeys();
-            DimensionRegistry.registerNoiseSettings();
             DimensionRegistry.registerChunkGenerators();
         });
 

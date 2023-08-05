@@ -7,8 +7,10 @@ package leaf.soulhome.datagen.language;
 import leaf.soulhome.SoulHome;
 import leaf.soulhome.constants.Constants;
 import leaf.soulhome.items.SoulHomeItemGroups;
+import leaf.soulhome.utils.ResourceLocationHelper;
 import leaf.soulhome.utils.StringHelper;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.LanguageProvider;
@@ -27,18 +29,16 @@ public class EngLangGen extends LanguageProvider
     @Override
     protected void addTranslations()
     {
-
         //Items and Blocks
         for (Item item : ForgeRegistries.ITEMS.getValues())
         {
-            if (item.getRegistryName().getNamespace().contentEquals(SoulHome.MODID))
+            final ResourceLocation registryName = ResourceLocationHelper.get(item);
+            if (registryName.getNamespace().contentEquals(SoulHome.MODID))
             {
-                final String path = item.getRegistryName().getPath();
+                final String path = registryName.getPath();
                 String localisedString = StringHelper.fixCapitalisation(path);
                 final String tooltipStringKey = String.format(Constants.StringKeys.SOULHOME_ITEM_TOOLTIP, path);
-
                 String tooltipString = "";
-
 
                 //string overrides
                 switch (localisedString)
@@ -60,11 +60,12 @@ public class EngLangGen extends LanguageProvider
         }
 
         //Entities
-        for (EntityType<?> type : ForgeRegistries.ENTITIES)
+        for (EntityType<?> type : ForgeRegistries.ENTITY_TYPES)
         {
-            if (type.getRegistryName().getNamespace().equals(SoulHome.MODID))
+            final ResourceLocation registryName = ResourceLocationHelper.get(type);
+            if (registryName.getNamespace().equals(SoulHome.MODID))
             {
-                add(type.getDescriptionId(), StringHelper.fixCapitalisation(type.getRegistryName().getPath()));
+                add(type.getDescriptionId(), StringHelper.fixCapitalisation(registryName.getPath()));
             }
         }
 

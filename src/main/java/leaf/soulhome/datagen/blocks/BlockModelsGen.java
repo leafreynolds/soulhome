@@ -8,7 +8,6 @@ import leaf.soulhome.SoulHome;
 import leaf.soulhome.registry.BlocksRegistry;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -38,11 +37,6 @@ public class BlockModelsGen extends BlockStateProvider
         simpleBlock(blockSupplier.get());
     }
 
-    public String getPath(Supplier<? extends Block> blockSupplier)
-    {
-        ResourceLocation location = blockSupplier.get().getRegistryName();
-        return location.getPath();
-    }
 
     @Override
     public void simpleBlock(Block block, ModelFile model)

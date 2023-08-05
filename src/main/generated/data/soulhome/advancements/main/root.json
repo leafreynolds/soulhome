@@ -1,24 +1,28 @@
 {
+  "criteria": {
+    "tick": {
+      "conditions": {
+        "items": [
+          null
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
   "display": {
-    "icon": {
-      "item": "soulhome:soulkey"
-    },
-    "title": {
-      "translate": "advancements.soulhome.main.title"
-    },
+    "announce_to_chat": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
     "description": {
       "translate": "advancements.soulhome.main.description"
     },
     "frame": "task",
-    "show_toast": false,
-    "announce_to_chat": false,
     "hidden": false,
-    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png"
-  },
-  "criteria": {
-    "tick": {
-      "trigger": "minecraft:tick",
-      "conditions": {}
+    "icon": {
+      "item": "soulhome:soulkey"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.soulhome.main.title"
     }
   },
   "requirements": [

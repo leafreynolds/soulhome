@@ -4,7 +4,8 @@
 
 package leaf.soulhome.datagen.patchouli.categories;
 
-import leaf.soulhome.datagen.patchouli.BookStuff;
+
+import leaf.soulhome.datagen.patchouli.categories.data.BookStuff;
 
 import java.util.List;
 

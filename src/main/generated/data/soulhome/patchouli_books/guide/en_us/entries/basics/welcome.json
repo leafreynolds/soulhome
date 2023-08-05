@@ -1,0 +1,29 @@
+{
+  "category": "soulhome:basics",
+  "icon": "soulhome:guide",
+  "name": "Welcome",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Hey, thanks for checking out this mod! It came about from my love of the $(item)Spectre Key$(0) from $(thing)RandomThings$(0). $(p)The idea of having a safe area in a different dimension that you could go to and come back from was very appealing. "
+    },
+    {
+      "type": "text",
+      "text": "This current iteration of SoulHome is very basic, with a low barrier of entry on purpose. $(p)There's some exciting stuff coming in future versions though, so I hope you'll stick around!"
+    },
+    {
+      "type": "text",
+      "text": "If you still aren't sure where to start, this book (as well as advancements) should help you find what the next step is. The book is set up to unlock new entries with every advancement completed.$(p) $(p)For now though, here's a tip:"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "soulhome:soulkey",
+      "text": "All you need is a little bit of iron and an ender pearl",
+      "title": "SoulKey"
+    }
+  ],
+  "priority": true,
+  "read_by_default": false,
+  "secret": false,
+  "sortnum": -10
+}

@@ -29,12 +29,12 @@ public class CommonEvents
     @SubscribeEvent
     public static void onLivingHurt(LivingHurtEvent event)
     {
-        final LivingEntity entityLiving = event.getEntityLiving();
+        final LivingEntity entityLiving = event.getEntity();
         if (entityLiving instanceof Player
                 && DimensionHelper.isInSoulDimension(entityLiving))
         {
             event.setCanceled(true);
-            event.getEntityLiving().fallDistance = 0;
+            entityLiving.fallDistance = 0;
 
             if (event.getSource() == DamageSource.OUT_OF_WORLD)
             {

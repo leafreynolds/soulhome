@@ -9,20 +9,15 @@ import leaf.soulhome.registry.ItemsRegistry;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.FrameType;
+import net.minecraft.advancements.critereon.*;
 import net.minecraft.commands.CommandFunction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.Registry;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
 
 import java.util.function.Consumer;
-
-import net.minecraft.advancements.critereon.EntityPredicate;
-import net.minecraft.advancements.critereon.ImpossibleTrigger;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
-import net.minecraft.advancements.critereon.LocationPredicate;
-import net.minecraft.advancements.critereon.LocationTrigger;
-import net.minecraft.advancements.critereon.TickTrigger;
 
 public class MainAdvancements implements Consumer<Consumer<Advancement>>
 {
@@ -40,14 +35,14 @@ public class MainAdvancements implements Consumer<Consumer<Advancement>>
 
         Advancement root = Advancement.Builder.advancement()
                 .display(ItemsRegistry.SOUL_KEY.get(),
-                        new TranslatableComponent(String.format(titleFormat, tabName)),
-                        new TranslatableComponent(String.format(descriptionFormat, tabName)),
+                        Component.translatable(String.format(titleFormat, tabName)),
+                        Component.translatable(String.format(descriptionFormat, tabName)),
                         new ResourceLocation("textures/gui/advancements/backgrounds/stone.png"),
                         FrameType.TASK,
                         false,//showToast
                         false,//announceChat
                         false)//hidden
-                .addCriterion("tick", new TickTrigger.TriggerInstance(EntityPredicate.Composite.ANY))
+                .addCriterion("tick", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.ANY))
                 .save(advancementConsumer, String.format(achievementPathFormat, tabName, "root"));
 
 
@@ -56,8 +51,8 @@ public class MainAdvancements implements Consumer<Consumer<Advancement>>
                 .parent(root)
                 .display(
                         ItemsRegistry.GUIDE.get(),
-                        new TranslatableComponent(String.format(titleFormat, obtainedSoulKey)),
-                        new TranslatableComponent(String.format(descriptionFormat, obtainedSoulKey)),
+                        Component.translatable(String.format(titleFormat, obtainedSoulKey)),
+                        Component.translatable(String.format(descriptionFormat, obtainedSoulKey)),
                         (ResourceLocation)null,
                         FrameType.TASK,
                         true, //showToast
@@ -76,8 +71,8 @@ public class MainAdvancements implements Consumer<Consumer<Advancement>>
                 .parent(advancement1)
                 .display(
                         ItemsRegistry.GUIDE.get(),
-                        new TranslatableComponent(String.format(titleFormat, obtainedGuide)),
-                        new TranslatableComponent(String.format(descriptionFormat, obtainedGuide)),
+                        Component.translatable(String.format(titleFormat, obtainedGuide)),
+                        Component.translatable(String.format(descriptionFormat, obtainedGuide)),
                         (ResourceLocation)null,
                         FrameType.TASK,
                         true, //showToast
@@ -95,14 +90,14 @@ public class MainAdvancements implements Consumer<Consumer<Advancement>>
                 .parent(advancement1)
                 .display(
                         ItemsRegistry.GUIDE.get(),
-                        new TranslatableComponent(String.format(titleFormat, enteredSoulDimension)),
-                        new TranslatableComponent(String.format(descriptionFormat, enteredSoulDimension)),
+                        Component.translatable(String.format(titleFormat, enteredSoulDimension)),
+                        Component.translatable(String.format(descriptionFormat, enteredSoulDimension)),
                         (ResourceLocation)null,
                         FrameType.TASK,
                         true, //showToast
                         true, //announce
                         false)//hidden
-                .addCriterion("entered_soul", LocationTrigger.TriggerInstance.located(LocationPredicate.inBiome(ResourceKey.create(Registry.BIOME_REGISTRY, SoulHome.SOULHOME_LOC))))
+                .addCriterion("entered_soul", PlayerTrigger.TriggerInstance.located(LocationPredicate.inBiome(ResourceKey.create(Registry.BIOME_REGISTRY, SoulHome.SOULHOME_LOC))))
                 .rewards(new AdvancementRewards(5, new ResourceLocation[0], new ResourceLocation[0], CommandFunction.CacheableFunction.NONE))
                 .save(advancementConsumer, String.format(achievementPathFormat, tabName, enteredSoulDimension));
 
@@ -111,8 +106,8 @@ public class MainAdvancements implements Consumer<Consumer<Advancement>>
                 .parent(advancement2)
                 .display(
                         ItemsRegistry.GUIDE.get(),
-                        new TranslatableComponent(String.format(titleFormat, blank)),
-                        new TranslatableComponent(String.format(descriptionFormat, blank)),
+                        Component.translatable(String.format(titleFormat, blank)),
+                        Component.translatable(String.format(descriptionFormat, blank)),
                         (ResourceLocation)null,
                         FrameType.TASK,
                         true, //showToast

@@ -1,36 +1,44 @@
 {
   "parent": "soulhome:main/obtained_soul_key",
+  "criteria": {
+    "entered_soul": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "soulhome:soulhome"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
   "display": {
-    "icon": {
-      "item": "soulhome:guide"
-    },
-    "title": {
-      "translate": "advancements.soulhome.entered_soul_dimension.title"
-    },
+    "announce_to_chat": true,
     "description": {
       "translate": "advancements.soulhome.entered_soul_dimension.description"
     },
     "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "soulhome:guide"
+    },
     "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
-  "rewards": {
-    "experience": 5
-  },
-  "criteria": {
-    "entered_soul": {
-      "trigger": "minecraft:location",
-      "conditions": {
-        "location": {
-          "biome": "soulhome:soulhome"
-        }
-      }
+    "title": {
+      "translate": "advancements.soulhome.entered_soul_dimension.title"
     }
   },
   "requirements": [
     [
       "entered_soul"
     ]
-  ]
+  ],
+  "rewards": {
+    "experience": 5
+  }
 }

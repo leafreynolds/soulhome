@@ -4,60 +4,58 @@
 
 package leaf.soulhome.utils;
 
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.BaseComponent;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 
 import java.util.UUID;
 
 public class TextHelper
 {
-    public static BaseComponent getPlayerTextObject(ServerLevel world, UUID id)
-    {
-        return getPlayerTextObject(world.getServer(), id);
-    }
+	public static MutableComponent getPlayerTextObject(ServerLevel world, UUID id)
+	{
+		return getPlayerTextObject(world.getServer(), id);
+	}
 
-    public static BaseComponent getPlayerTextObject(MinecraftServer server, UUID id)
-    {
-        String playerName = PlayerHelper.getPlayerName(id, server);
-        return createTextComponentWithTip(playerName, id.toString());
-    }
+	public static MutableComponent getPlayerTextObject(MinecraftServer server, UUID id)
+	{
+		String playerName = PlayerHelper.getPlayerName(id, server);
+		return createTextComponentWithTip(playerName, id.toString());
+	}
 
-    public static BaseComponent createTextComponentWithTip(String text, String tooltipText)
-    {
-        //Always surround tool tip items with brackets
-        BaseComponent textComponent = new TextComponent("[" + text + "]");
-        textComponent.withStyle(style ->
-        {
-            return style.applyFormat(ChatFormatting.GREEN)//color tool tip items green
-                    .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(tooltipText))).withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, tooltipText));
-        });
-        return textComponent;
-    }
+	public static MutableComponent createTextComponentWithTip(String text, String tooltipText)
+	{
+		//Always surround tool tip items with brackets
+		MutableComponent textComponent = Component.literal("[" + text + "]");
+		textComponent.withStyle(style -> style.applyFormat(ChatFormatting.GREEN)//color tool tip items green
+				.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal(tooltipText)))
+				.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, tooltipText)));
+		return textComponent;
+	}
 
-    public static BaseComponent createTextWithTooltip(TranslatableComponent translation, TranslatableComponent description)
-    {
-        //Always surround tool tip items with brackets
-        translation.withStyle(style ->
-        {
-            return style.applyFormat(ChatFormatting.GREEN)//color tool tip items green
-                    .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, description)).withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, translation.getKey()));
-        });
-        return translation;
-    }
+	public static MutableComponent createTextWithTooltip(MutableComponent translation, MutableComponent description)
+	{
+		//Always surround tool tip items with brackets
+		translation.withStyle(style ->
+		{
+			return style.withColor(ChatFormatting.GREEN)//color tool tip items green
+					.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, description));
+		});
+		return translation;
+	}
 
-    public static BaseComponent createTranslatedText(String s, Object... a)
-    {
-        return new TranslatableComponent(s, a);
-    }
+	public static MutableComponent createTranslatedText(String s, Object... a)
+	{
+		return Component.translatable(s, a);
+	}
 
-    public static BaseComponent createText(Object s)
-    {
-        return new TextComponent(s.toString());
-    }
+
+	public static MutableComponent createText(Object s)
+	{
+		return Component.literal(s.toString());
+	}
 }

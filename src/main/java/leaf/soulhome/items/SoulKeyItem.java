@@ -113,16 +113,17 @@ public class SoulKeyItem extends BaseItem
 
 //region Remaining item from crafting, using the soul key as an ingredient. We want to keep the key.
     @Override
-    public boolean hasContainerItem(ItemStack stack)
+    public boolean hasCraftingRemainingItem(ItemStack stack)
     {
         return true;
     }
 
     @Override
-    public ItemStack getContainerItem(ItemStack stack)
+    public ItemStack getCraftingRemainingItem(ItemStack stack)
     {
         return new ItemStack(stack.getItem());
     }
-//endregion
+
+    //endregion
 
 }

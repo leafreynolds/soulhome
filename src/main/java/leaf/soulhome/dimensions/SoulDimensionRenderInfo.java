@@ -4,7 +4,6 @@
 
 package leaf.soulhome.dimensions;
 
-import leaf.soulhome.client.renderers.EmptyWeatherRenderer;
 import net.minecraft.client.renderer.DimensionSpecialEffects;
 import net.minecraft.world.phys.Vec3;
 
@@ -26,7 +25,6 @@ public class SoulDimensionRenderInfo extends DimensionSpecialEffects
     public SoulDimensionRenderInfo(float cloudLevel, boolean hasGround, SkyType skyType, boolean forceBrightLightmap, boolean constantAmbientLight)
     {
         super(cloudLevel, hasGround, skyType, forceBrightLightmap, constantAmbientLight);
-        this.setWeatherRenderHandler(new EmptyWeatherRenderer());
     }
 
     @Override

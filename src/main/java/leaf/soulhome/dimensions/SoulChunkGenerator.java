@@ -10,25 +10,21 @@ import leaf.soulhome.registry.BiomeRegistry;
 import leaf.soulhome.utils.DimensionHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeManager;
-import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.biome.FixedBiomeSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.blending.Blender;
-import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -67,21 +63,8 @@ public class SoulChunkGenerator extends ChunkGenerator
         return providerCodec;
     }
 
-
     @Override
-    public ChunkGenerator withSeed(long seedIn)
-    {
-        return this;
-    }
-
-    @Override
-    public Climate.Sampler climateSampler()
-    {
-        return null;
-    }
-
-    @Override
-    public void applyCarvers(WorldGenRegion worldGenRegion, long p_187692_, BiomeManager biomeManager, StructureFeatureManager structureFeatureManager, ChunkAccess chunkAccess, GenerationStep.Carving carving)
+    public void applyCarvers(WorldGenRegion worldGenRegion, long p_223044_, RandomState randomState, BiomeManager biomeManager, StructureManager structureManager, ChunkAccess chunkAccess, GenerationStep.Carving carving)
     {
 
     }
@@ -102,19 +85,13 @@ public class SoulChunkGenerator extends ChunkGenerator
 
 
     @Override
-    public void buildSurface(WorldGenRegion worldGenRegion, StructureFeatureManager structureFeatureManager, ChunkAccess chunkAccess)
+    public void buildSurface(WorldGenRegion worldGenRegion, StructureManager structureManager, RandomState randomState, ChunkAccess chunkAccess)
     {
 
     }
 
     @Override
-    public void createStructures(RegistryAccess registries, StructureFeatureManager structures, ChunkAccess chunk, StructureManager templates, long seed) {    }
-
-    @Override
-    public void createReferences(WorldGenLevel world, StructureFeatureManager structures, ChunkAccess chunk) {    }
-
-    @Override
-    public CompletableFuture<ChunkAccess> fillFromNoise(Executor executor, Blender blender, StructureFeatureManager structureFeatureManager, ChunkAccess chunkAccess)
+    public CompletableFuture<ChunkAccess> fillFromNoise(Executor executor, Blender blender, RandomState randomState, StructureManager structureManager, ChunkAccess chunkAccess)
     {
         return CompletableFuture.completedFuture(chunkAccess);
     }
@@ -132,20 +109,19 @@ public class SoulChunkGenerator extends ChunkGenerator
     }
 
     @Override
-    public int getBaseHeight(int x, int z, Heightmap.Types heightmapTypes, LevelHeightAccessor levelHeightAccessor)
+    public int getBaseHeight(int x, int z, Heightmap.Types heightMapTypes, LevelHeightAccessor levelHeightAccessor, RandomState randomState)
     {
         return DimensionHelper.FLOOR_LEVEL;
     }
 
     @Override
-    public NoiseColumn getBaseColumn(int x, int z, LevelHeightAccessor levelHeightAccessor)
+    public NoiseColumn getBaseColumn(int x, int z, LevelHeightAccessor levelHeightAccessor, RandomState randomState)
     {
-        BlockState[] blockstate = new BlockState[0];
-        return new NoiseColumn(0, blockstate);
+        return new NoiseColumn(0, new BlockState[0]);
     }
 
     @Override
-    public void addDebugScreenInfo(List<String> p_208054_, BlockPos p_208055_)
+    public void addDebugScreenInfo(List<String> p_223175_, RandomState randomState, BlockPos blockPos)
     {
         //??
     }

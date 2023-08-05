@@ -1,0 +1,19 @@
+{
+  "category": "soulhome:basics",
+  "icon": "soulhome:guide",
+  "name": "Guide",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Your guide to everything in the mod! There isn't much at the moment, but future versions will allow you to build structures within your soul in order to gain benefits when you're outside of it. "
+    },
+    {
+      "type": "text",
+      "text": "For example, building a farm in a specific multiblock structure might mean that you get more saturation out of each thing that you eat.  Or maybe you'd build an armoury in order to gain a buff to toughness. At this point in time though, there's only the $(l:soulhome:category.basics/entry.soul_key)$(item)SoulKey$(0) $(/l)"
+    }
+  ],
+  "priority": false,
+  "read_by_default": false,
+  "secret": false,
+  "sortnum": 2
+}

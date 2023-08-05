@@ -32,7 +32,7 @@ import net.minecraft.world.level.storage.DerivedLevelData;
 import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraft.world.level.storage.WorldData;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.event.level.LevelEvent;
 
 import java.util.Map;
 import java.util.concurrent.Executor;
@@ -40,18 +40,9 @@ import java.util.function.BiFunction;
 
 public class DimensionRegistry
 {
-
-
-    public static ResourceKey<NoiseGeneratorSettings> DIMENSION_NOISE_SETTINGS;
-
     public static class DimensionTypes
     {
         public static final ResourceKey<DimensionType> SOUL_DIMENSION_TYPE = ResourceKey.create(Registry.DIMENSION_TYPE_REGISTRY, SoulHome.SOULHOME_LOC);
-    }
-
-    public static void registerNoiseSettings()
-    {
-        DIMENSION_NOISE_SETTINGS = ResourceKey.create(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY, SoulHome.SOULHOME_LOC);
     }
 
     public static void registerChunkGenerators()
@@ -81,14 +72,14 @@ public class DimensionRegistry
         // Refer to META-INF/accesstransformer.cfg here for changing private fields to public
         Executor executor = server.executor;
         LevelStorageSource.LevelStorageAccess levelSave = server.storageSource;
-        ChunkProgressListener chunkStatusListener = server.progressListenerFactory.create(11);
+        ChunkProgressListener chunkProgressListener = server.progressListenerFactory.create(11);
 
         //configs
         WorldData serverConfiguration = server.getWorldData();
-        WorldGenSettings dimensionGeneratorSettings = serverConfiguration.worldGenSettings();
+        WorldGenSettings worldGenSettings = serverConfiguration.worldGenSettings();
 
         // register the dimension
-        Registry<LevelStem> dimensionRegistry = dimensionGeneratorSettings.dimensions();
+        Registry<LevelStem> dimensionRegistry = worldGenSettings.dimensions();
         if (dimensionRegistry instanceof WritableRegistry)
         {
             final WritableRegistry<LevelStem> writableRegistry = (WritableRegistry<LevelStem>) dimensionRegistry;
@@ -101,6 +92,7 @@ public class DimensionRegistry
 
         //base the world info on overworld? Not actually sure if that's what I want for soul dimensions
         //todo revisit this later. Don't just forget about it.
+        // ^ LOL
         DerivedLevelData derivedWorldInfo = new DerivedLevelData(serverConfiguration, serverConfiguration.overworldData());
 
         ServerLevel newSoulWorld = new ServerLevel(
@@ -109,13 +101,13 @@ public class DimensionRegistry
                 levelSave,
                 derivedWorldInfo,
                 worldKey,
-                dimension.typeHolder(),
-                chunkStatusListener,
-                dimension.generator(),
-                dimensionGeneratorSettings.isDebug(),
-                BiomeManager.obfuscateSeed(dimensionGeneratorSettings.seed()),
+                dimension,
+                chunkProgressListener,
+                worldGenSettings.isDebug(),
+                BiomeManager.obfuscateSeed(worldGenSettings.seed()),
                 ImmutableList.of(),
                 false);
+
 
         // pay attention to borders?
         // why do we link the soul world borders to the over world borders?
@@ -133,7 +125,7 @@ public class DimensionRegistry
         server.markWorldsDirty();
 
         //then post an event for our new world. Welcome :)
-        MinecraftForge.EVENT_BUS.post(new WorldEvent.Load(newSoulWorld));
+        MinecraftForge.EVENT_BUS.post(new LevelEvent.Load(newSoulWorld));
         LogHelper.info("New soul dimension has been created: " + dimensionKey.location().toString());
 
         //put in the platform
