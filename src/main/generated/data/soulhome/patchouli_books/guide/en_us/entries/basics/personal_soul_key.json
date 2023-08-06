@@ -1,0 +1,23 @@
+{
+  "advancement": "soulhome:main/obtained_soul_key",
+  "category": "soulhome:basics",
+  "icon": "soulhome:personal_soulkey",
+  "name": "Personal Soul Key",
+  "pages": [
+    {
+      "type": "text",
+      "text": "What if you have friends that you want to have access to your soul. Sounds dangerous to me, but hey, no judgement. $(p)$(p)Just like the other, hold [$(k:use)] for the full duration, you and all other entities within the circle will be transported to the soul that the key is set for."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "soulhome:personal_soulkey",
+      "text": "Similar to the standard key, except you use an ender eye.",
+      "title": "SoulKey"
+    }
+  ],
+  "priority": false,
+  "read_by_default": false,
+  "secret": false,
+  "sortnum": 3,
+  "turnin": "soulhome:main/obtained_soul_key"
+}

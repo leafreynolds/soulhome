@@ -38,7 +38,7 @@ public class CommonEvents
 
             if (event.getSource() == DamageSource.OUT_OF_WORLD)
             {
-                DimensionHelper.FlipDimension((Player) entityLiving, entityLiving.getServer(), null);
+                DimensionHelper.FlipDimension((Player) entityLiving, entityLiving.getServer(), null, entityLiving.getUUID());
             }
 
         }

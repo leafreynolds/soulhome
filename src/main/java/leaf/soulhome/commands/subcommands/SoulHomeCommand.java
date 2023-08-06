@@ -14,7 +14,6 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 
 public class SoulHomeCommand extends ModCommand
@@ -51,7 +50,7 @@ public class SoulHomeCommand extends ModCommand
 
     private static int teleportToSoul(CommandContext<CommandSourceStack> context, ServerPlayer player)
     {
-        DimensionHelper.FlipDimension(player, context.getSource().getServer(), null);
+        DimensionHelper.FlipDimension(player, context.getSource().getServer(), null, player.getUUID());
 
         return Command.SINGLE_SUCCESS;
     }

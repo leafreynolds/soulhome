@@ -10,6 +10,7 @@ package leaf.soulhome.registry;
 
 import leaf.soulhome.SoulHome;
 import leaf.soulhome.items.GuideItem;
+import leaf.soulhome.items.PersonalSoulkey;
 import leaf.soulhome.items.SoulKeyItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
@@ -21,9 +22,9 @@ public class ItemsRegistry
 {
     public static final DeferredRegister<net.minecraft.world.item.Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, SoulHome.MODID);
 
-    //other items
 
     public static final RegistryObject<Item> SOUL_KEY = ITEMS.register("soulkey", () -> createItem(new SoulKeyItem()));
+    public static final RegistryObject<Item> PERSONAL_SOUL_KEY = ITEMS.register("personal_soulkey", () -> createItem(new PersonalSoulkey()));
     public static final RegistryObject<net.minecraft.world.item.Item> GUIDE = ITEMS.register("guide", () -> createItem(new GuideItem()));
 
 

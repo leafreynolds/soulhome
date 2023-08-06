@@ -42,7 +42,7 @@ public class PatchouliBasics
                 };
         entries.add(bookEntry);
 
-        BookStuff.Entry soulkeyEntry = new BookStuff.Entry("soul_key", basics, basics.icon);
+        BookStuff.Entry soulkeyEntry = new BookStuff.Entry("soul_key", basics, "soulhome:soulkey");
         soulkeyEntry.sortnum = 3;
         soulkeyEntry.advancement = "soulhome:main/obtained_soul_key";
         soulkeyEntry.turnin = "soulhome:main/obtained_soul_key";
@@ -54,6 +54,17 @@ public class PatchouliBasics
 
                 };
         entries.add(soulkeyEntry);
+
+        BookStuff.Entry personalSoulKey = new BookStuff.Entry("personal_soul_key", basics, "soulhome:personal_soulkey");
+        personalSoulKey.sortnum = 3;
+        personalSoulKey.advancement = "soulhome:main/obtained_soul_key";
+        personalSoulKey.turnin = "soulhome:main/obtained_soul_key";
+        personalSoulKey.pages = new BookStuff.Page[]
+                {
+                        new BookStuff.TextPage("What if you have friends that you want to have access to your soul. Sounds dangerous to me, but hey, no judgement. $(p)$(p)Just like the other, hold [$(k:use)] for the full duration, you and all other entities within the circle will be transported to the soul that the key is set for."),
+                        new BookStuff.CraftingPage("Similar to the standard key, except you use an ender eye.", "soulhome:personal_soulkey").setTitle("SoulKey"),
+                };
+        entries.add(personalSoulKey);
 
         BookStuff.Entry enteredSoul = new BookStuff.Entry("soul", basics, basics.icon);
         enteredSoul.sortnum = 4;

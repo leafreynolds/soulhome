@@ -22,6 +22,7 @@ import net.minecraft.server.level.ServerLevel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static leaf.soulhome.constants.Constants.NBTKeys.*;
 
@@ -46,7 +47,7 @@ public class DimensionHelper
     }
 
     // move the player to/from their soul dimension
-    public static void FlipDimension(Player playerEntity, MinecraftServer server, List<Entity> entitiesInRange)
+    public static void FlipDimension(Player playerEntity, MinecraftServer server, List<Entity> entitiesInRange, UUID targetSoulUUID)
     {
         //get (or create if this is the first time) our little save
         CompoundTag soulNBT = PlayerHelper.getPersistentTag(playerEntity, SoulHome.SOULHOME_LOC.toString());
@@ -98,7 +99,7 @@ public class DimensionHelper
         {
             //now we can go to the soul
             //will create the dimension for that user if it's the first time accessing it
-            destination = getOrCreateSoulDimension(playerEntity.getStringUUID(), server);
+            destination = getOrCreateSoulDimension(targetSoulUUID.toString(), server);
 
         }
 
@@ -110,18 +111,17 @@ public class DimensionHelper
         {
             //if it's a player entity, save their last dimension position individually.
             //helps them leave another player's soul. Nothing else can leave without help.
-            if (ent instanceof Player && !isInSoulDimension((Player) ent))
+            if (ent instanceof Player targetPlayer && !isInSoulDimension(targetPlayer))
             {
-                soulNBT = PlayerHelper.getPersistentTag((Player) ent, SoulHome.SOULHOME_LOC.toString());
+                soulNBT = PlayerHelper.getPersistentTag(targetPlayer, SoulHome.SOULHOME_LOC.toString());
                 // XYZ
-                soulNBT.putDouble(LAST_DIMENSION_X, ent.getX());
-                soulNBT.putDouble(LAST_DIMENSION_Y, ent.getY());
-                soulNBT.putDouble(LAST_DIMENSION_Z, ent.getZ());
+                soulNBT.putDouble(LAST_DIMENSION_X, targetPlayer.getX());
+                soulNBT.putDouble(LAST_DIMENSION_Y, targetPlayer.getY());
+                soulNBT.putDouble(LAST_DIMENSION_Z, targetPlayer.getZ());
 
                 // save the dimension info
                 soulNBT.putString(LAST_DIMENSION_MOD_ID, location.getNamespace());
                 soulNBT.putString(LAST_DIMENSION_MOD_DIMENSION, location.getPath());
-
             }
 
 

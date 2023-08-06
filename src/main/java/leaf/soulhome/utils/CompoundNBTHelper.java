@@ -182,6 +182,12 @@ public final class CompoundNBTHelper
         return verifyExistance(compoundTag, tag + "Most") && verifyExistance(compoundTag, tag + "Least")
                ? compoundTag.getUUID(tag) : null;
     }
+    @Nullable
+    public static UUID getUuid(CompoundTag compoundTag, String tag, UUID defaultUUID)
+    {
+        return verifyExistance(compoundTag, tag + "Most") && verifyExistance(compoundTag, tag + "Least")
+               ? compoundTag.getUUID(tag) : defaultUUID;
+    }
 
     public static ListTag getList(CompoundTag compoundTag, String tag, int objtype, boolean nullifyOnFail)
     {

@@ -1,7 +1,7 @@
 {
   "advancement": "soulhome:main/obtained_soul_key",
   "category": "soulhome:basics",
-  "icon": "soulhome:guide",
+  "icon": "soulhome:soulkey",
   "name": "Soul Key",
   "pages": [
     {

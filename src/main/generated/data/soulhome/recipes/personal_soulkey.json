@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "E": {
+      "item": "minecraft:ender_eye"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern": [
+    "I  ",
+    "II ",
+    "  E"
+  ],
+  "result": {
+    "item": "soulhome:personal_soulkey"
+  }
+}

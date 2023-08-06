@@ -17,6 +17,7 @@
   "entry.soul_key": "SoulKey",
   "entry.welcome": "Welcome",
   "item.soulhome.guide": "Guide",
+  "item.soulhome.personal_soulkey": "Personal Soulkey",
   "item.soulhome.soulkey": "Soulkey",
   "itemGroup.soulhome.items": "SoulHome Items",
   "key.soulhome.soul.charge": "Charge Key To Transport",
@@ -27,6 +28,7 @@
   "tooltip.item.info.shift": "§7Hold §8[§eShift§8]",
   "tooltip.item.info.shift_control": "§7Hold §8[§eShift§8] §7and §8[§eControl§8]",
   "tooltip.item.soulhome.guide": "If patchouli is installed, this is your guide to the mod",
+  "tooltip.item.soulhome.personal_soulkey": "",
   "tooltip.item.soulhome.soulkey": "The key to accessing your own soul. Use for the full duration and it will take you there. As well as anything else nearby.",
   "tooltip.soulhome.patchouli.not_installed": "Patchouli is not installed"
 }

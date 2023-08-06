@@ -34,15 +34,6 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
     @Override
     protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer)
     {
-        //example recipes obtained from following website on 3rd April '21. Thank you ChampionAsh5357!
-        //https://github.com/ChampionAsh5357/1.16.x-Minecraft-Tutorial/blob/1.16.1-32.0.61-web/src/main/java/io/github/championash5357/tutorial/data/TutorialRecipeProvider.java
-
-        //addBasicArmorRecipes(consumer, ItemsRegistry.RUBY.get(), ItemsRegistry.RUBY_HELMET.get(), ItemsRegistry.RUBY_CHESTPLATE.get(), ItemsRegistry.RUBY_LEGGINGS.get(), ItemsRegistry.RUBY_BOOTS.get());
-        //ShapedRecipeBuilder.shapedRecipe(BlocksRegistry.WASHER.get()).key('I', Items.IRON_INGOT).key('W', Items.WATER_BUCKET).patternLine("III").patternLine("IWI").patternLine("III").addCriterion("in_water", enteredBlock(Blocks.WATER)).build(consumer);
-
-
-        //addOreSmeltingRecipes(consumer, BlocksRegistry.GEM_BLOCK.get(), ItemsRegistry.GUIDE.get(), 1.0f, 200);
-
         ShapedRecipeBuilder
                 .shaped(ItemsRegistry.SOUL_KEY.get()) //output
                 .define('I', Items.IRON_INGOT)
@@ -60,7 +51,14 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
                 .unlockedBy("has_soul_key", has(ItemsRegistry.SOUL_KEY.get()))
                 .save(consumer);
 
-
-
+        ShapedRecipeBuilder
+                .shaped(ItemsRegistry.PERSONAL_SOUL_KEY.get()) //output
+                .define('I', Items.IRON_INGOT)
+                .define('E', Items.ENDER_EYE)
+                .pattern("I  ") //top row
+                .pattern("II ") //middle row
+                .pattern("  E") //bottom row
+                .unlockedBy("has_material", has(Items.ENDER_EYE))
+                .save(consumer);
     }
 }
