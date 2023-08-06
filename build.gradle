@@ -245,6 +245,7 @@ if (System.getProperty("idea.sync.active") == "true") {
     }
 }
 
+def resolvedChangelog = null
 
 //closure to generate the changelog once, and only when needed by CurseGradle
 def changeLogResolver = { ->
