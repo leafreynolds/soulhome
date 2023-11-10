@@ -191,7 +191,7 @@ processResources {
 
     filesMatching('data/soulhome/patchouli_books/guide/book.json') {
         filter {
-            it.replaceAll("buildNumber", config.build_number)
+            it.replaceAll("buildNumber", "${build_number}")
         }
     }
 }
