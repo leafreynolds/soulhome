@@ -6,6 +6,7 @@ package leaf.soulhome.datagen.language;
 
 import leaf.soulhome.SoulHome;
 import leaf.soulhome.constants.Constants;
+import leaf.soulhome.items.BoundSoulkey;
 import leaf.soulhome.items.SoulHomeItemGroups;
 import leaf.soulhome.utils.ResourceLocationHelper;
 import leaf.soulhome.utils.StringHelper;
@@ -52,8 +53,15 @@ public class EngLangGen extends LanguageProvider
                         break;
                 }
 
+                if (item instanceof BoundSoulkey)
+                {
+                    add(item.getDescriptionId(), "Bound Soulkey");
+                }
+                else
+                {
+                    add(item.getDescriptionId(), localisedString);
+                }
                 add(tooltipStringKey, tooltipString);
-                add(item.getDescriptionId(), localisedString);
 
 
             }

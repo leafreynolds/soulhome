@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.UUID;
 
-public class PersonalSoulkey extends SoulKeyItem
+public class BoundSoulkey extends SoulKeyItem
 {
 
 	@Override
@@ -49,10 +49,15 @@ public class PersonalSoulkey extends SoulKeyItem
 		if(level.isClientSide)
 			return;
 
-		itemStack.getOrCreateTag().putUUID("soul_uuid", player.getUUID());
-		itemStack.getOrCreateTag().putString("soul_name", player.getGameProfile().getName());
+		bindKeyToDimension(itemStack, player);
 	}
 
+	private static void bindKeyToDimension(ItemStack itemStack, Player player)
+	{
+		final CompoundTag tag = itemStack.getOrCreateTag();
+		tag.putUUID("soul_uuid", player.getUUID());
+		tag.putString("soul_name", player.getGameProfile().getName());
+	}
 
 	@Nonnull
 	@Override
@@ -60,12 +65,19 @@ public class PersonalSoulkey extends SoulKeyItem
 	{
 		if (!livingEntity.level.isClientSide && livingEntity instanceof Player player)
 		{
+			//fix creative mode keys
+			final CompoundTag tag = stack.getOrCreateTag();
+			if (!tag.hasUUID("soul_uuid"))
+			{
+				bindKeyToDimension(stack, player);
+			}
+
 			//find all creatures in range
 			DimensionHelper.FlipDimension(
 					player,
 					player.getServer(),
 					EntityHelper.getEntitiesInRange(livingEntity,2.5d, true),
-					CompoundNBTHelper.getUuid(stack.getOrCreateTag(),"soul_uuid", player.getUUID())
+					CompoundNBTHelper.getUuid(tag,"soul_uuid", player.getUUID())
 			);
 		}
 
