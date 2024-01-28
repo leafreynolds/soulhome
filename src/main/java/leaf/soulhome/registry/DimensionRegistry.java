@@ -15,17 +15,23 @@ import leaf.soulhome.utils.LogHelper;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.ResourceKeyArgument;
 import net.minecraft.core.*;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.progress.ChunkProgressListener;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.biome.BiomeManager;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.border.BorderChangeListener;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.dimension.DimensionType;
@@ -36,6 +42,9 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.StructureType;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.minecraft.world.level.storage.DerivedLevelData;
 import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraft.world.level.storage.WorldData;
@@ -135,37 +144,34 @@ public class DimensionRegistry
 
 		//then post an event for our new world. Welcome :)
 		MinecraftForge.EVENT_BUS.post(new LevelEvent.Load(newSoulWorld));
-		LogHelper.info("New soul dimension has been created: " + dimensionKey.location().toString());
+		LogHelper.info("New soul dimension has been created: " + dimensionKey.location());
 
-		//put in the platform
-final int PLATFORM_RADIUS = 16;
-for (int x = -PLATFORM_RADIUS; x < PLATFORM_RADIUS; x++)
-{
-    for (int z = -PLATFORM_RADIUS; z < PLATFORM_RADIUS; z++)
-    {
-        newSoulWorld.setBlockAndUpdate(new BlockPos(x, DimensionHelper.FLOOR_LEVEL, z), Blocks.GRASS_BLOCK.defaultBlockState());
-        newSoulWorld.setBlockAndUpdate(new BlockPos(x, DimensionHelper.FLOOR_LEVEL - 1, z), Blocks.DIRT.defaultBlockState());
-        newSoulWorld.setBlockAndUpdate(new BlockPos(x, DimensionHelper.FLOOR_LEVEL - 2, z), Blocks.DIRT.defaultBlockState());
-        newSoulWorld.setBlockAndUpdate(new BlockPos(x, DimensionHelper.FLOOR_LEVEL - 3, z), Blocks.DIRT.defaultBlockState());
-        newSoulWorld.setBlockAndUpdate(new BlockPos(x, DimensionHelper.FLOOR_LEVEL - 4, z), Blocks.STONE.defaultBlockState());
-    }
-}
-
-
-Structure structure = ?????????????????????????????????
-ChunkGenerator chunkGenerator = newSoulWorld.getChunkSource().getGenerator();
-StructureStart structureStart = structure.generate(server.registryAccess(), chunkGenerator, chunkGenerator.getBiomeSource(), newSoulWorld.getChunkSource().randomState(), newSoulWorld.getStructureManager(), newSoulWorld.getSeed(), new ChunkPos(new BlockPos(0, 64, 0)), 0, newSoulWorld, (biome) -> true);
-BoundingBox boundingbox = structureStart.getBoundingBox();
-ChunkPos chunkpos = new ChunkPos(SectionPos.blockToSectionCoord(boundingbox.minX()), SectionPos.blockToSectionCoord(boundingbox.minZ()));
-ChunkPos chunkpos1 = new ChunkPos(SectionPos.blockToSectionCoord(boundingbox.maxX()), SectionPos.blockToSectionCoord(boundingbox.maxZ()));
-ChunkPos.rangeClosed(chunkpos, chunkpos1).forEach((chunkPos) -> {
-	structureStart.placeInChunk(newSoulWorld, newSoulWorld.structureManager(), chunkGenerator, newSoulWorld.getRandom(), new BoundingBox(chunkPos.getMinBlockX(), newSoulWorld.getMinBuildHeight(), chunkPos.getMinBlockZ(), chunkPos.getMaxBlockX(), newSoulWorld.getMaxBuildHeight(), chunkPos.getMaxBlockZ()), chunkPos);
-});
-
-
+		StructurePlaceSettings settings = (new StructurePlaceSettings()).setIgnoreEntities(true).setMirror(Mirror.NONE).setRotation(Rotation.NONE);
+		StructureTemplateManager manager = newSoulWorld.getStructureManager();
+		ResourceLocation soulIslandLocation = new ResourceLocation(SoulHome.MODID, "soul_island");
+		Optional<StructureTemplate> templateOptional = manager.get(soulIslandLocation);
+		if(templateOptional.isPresent()) {
+			StructureTemplate template = templateOptional.get();
+			BlockPos pos = new BlockPos(-template.getSize().getX()/2, DimensionHelper.FLOOR_LEVEL-template.getSize().getY(), -template.getSize().getZ()/2);
+			template.placeInWorld(newSoulWorld, pos, new BlockPos(0, 0, 0), settings, newSoulWorld.random, 0);
+		} else {
+		//put in the platform via legacy method if structure fails to load
+		LogHelper.warn("Dimension generated via legacy method!!");
+		final int PLATFORM_RADIUS = 16;
+		for (int x = -PLATFORM_RADIUS; x < PLATFORM_RADIUS; x++)
+		{
+			for (int z = -PLATFORM_RADIUS; z < PLATFORM_RADIUS; z++)
+			{
+				newSoulWorld.setBlockAndUpdate(new BlockPos(x, DimensionHelper.FLOOR_LEVEL, z), Blocks.GRASS_BLOCK.defaultBlockState());
+				newSoulWorld.setBlockAndUpdate(new BlockPos(x, DimensionHelper.FLOOR_LEVEL - 1, z), Blocks.DIRT.defaultBlockState());
+				newSoulWorld.setBlockAndUpdate(new BlockPos(x, DimensionHelper.FLOOR_LEVEL - 2, z), Blocks.DIRT.defaultBlockState());
+				newSoulWorld.setBlockAndUpdate(new BlockPos(x, DimensionHelper.FLOOR_LEVEL - 3, z), Blocks.DIRT.defaultBlockState());
+				newSoulWorld.setBlockAndUpdate(new BlockPos(x, DimensionHelper.FLOOR_LEVEL - 4, z), Blocks.STONE.defaultBlockState());
+			}
+		}
+	}
 		//send a packet to all players, requesting that they refresh their dimension list.
 		Network.sendPacketToAll(new SyncDimensionListMessage(worldKey, true));
-
 		//finally return the new world so the player can finish teleporting there
 		return newSoulWorld;
 	}
