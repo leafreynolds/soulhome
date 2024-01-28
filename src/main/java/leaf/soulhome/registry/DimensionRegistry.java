@@ -53,6 +53,8 @@ import net.minecraftforge.event.level.LevelEvent;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.Executor;
 import java.util.function.BiFunction;
 
@@ -80,7 +82,7 @@ public class DimensionRegistry
 	// Once a dimension is created using this method, it will load automatically on server boot
 	// Special thanks to the NewTardisMod team. This would have been a nightmare to figure out
 	// https://gitlab.com/Spectre0987/TardisMod-1-14/-/tree/1.16
-	public static ServerLevel createSoulDimension(MinecraftServer server, ResourceKey<Level> worldKey)
+	public static ServerLevel createSoulDimension(MinecraftServer server, ResourceKey<Level> worldKey, String userUUID)
 	{
 		ResourceKey<LevelStem> dimensionKey = ResourceKey.create(Registry.LEVEL_STEM_REGISTRY, worldKey.location());
 
@@ -148,31 +150,45 @@ public class DimensionRegistry
 
 		StructurePlaceSettings settings = (new StructurePlaceSettings()).setIgnoreEntities(true).setMirror(Mirror.NONE).setRotation(Rotation.NONE);
 		StructureTemplateManager manager = newSoulWorld.getStructureManager();
-		ResourceLocation soulIslandLocation = new ResourceLocation(SoulHome.MODID, "soul_island");
+
+		// Use the UUID of the player to choose an island structure, different players will get different islands representitive of their 'souls'
+		UUID soul = UUID.fromString(userUUID);
+		Random rand = new Random(soul.getLeastSignificantBits() ^ soul.getMostSignificantBits());
+		int islandStyle = rand.nextInt() % 1; // TODO: add more islands, need to change this value as more islands are added
+		ResourceLocation soulIslandLocation = new ResourceLocation(SoulHome.MODID, "soul_island" + islandStyle);
+
 		Optional<StructureTemplate> templateOptional = manager.get(soulIslandLocation);
-		if(templateOptional.isPresent()) {
-			StructureTemplate template = templateOptional.get();
-			BlockPos pos = new BlockPos(-template.getSize().getX()/2, DimensionHelper.FLOOR_LEVEL-template.getSize().getY(), -template.getSize().getZ()/2);
-			template.placeInWorld(newSoulWorld, pos, new BlockPos(0, 0, 0), settings, newSoulWorld.random, 0);
-		} else {
-		//put in the platform via legacy method if structure fails to load
-		LogHelper.warn("Dimension generated via legacy method!!");
-		final int PLATFORM_RADIUS = 16;
-		for (int x = -PLATFORM_RADIUS; x < PLATFORM_RADIUS; x++)
+		if (templateOptional.isPresent())
 		{
-			for (int z = -PLATFORM_RADIUS; z < PLATFORM_RADIUS; z++)
+			StructureTemplate template = templateOptional.get();
+			BlockPos pos = new BlockPos(-template.getSize().getX() / 2, DimensionHelper.FLOOR_LEVEL - template.getSize().getY(), -template.getSize().getZ() / 2);
+			template.placeInWorld(newSoulWorld, pos, new BlockPos(0, 0, 0), settings, newSoulWorld.random, 0);
+		}
+		else
+		{
+			//put in the platform via legacy method if structure fails to load
+			LogHelper.warn("Dimension generated via legacy method!!");
+			final int PLATFORM_RADIUS = 16;
+			for (int x = -PLATFORM_RADIUS; x < PLATFORM_RADIUS; x++)
 			{
-				newSoulWorld.setBlockAndUpdate(new BlockPos(x, DimensionHelper.FLOOR_LEVEL, z), Blocks.GRASS_BLOCK.defaultBlockState());
-				newSoulWorld.setBlockAndUpdate(new BlockPos(x, DimensionHelper.FLOOR_LEVEL - 1, z), Blocks.DIRT.defaultBlockState());
-				newSoulWorld.setBlockAndUpdate(new BlockPos(x, DimensionHelper.FLOOR_LEVEL - 2, z), Blocks.DIRT.defaultBlockState());
-				newSoulWorld.setBlockAndUpdate(new BlockPos(x, DimensionHelper.FLOOR_LEVEL - 3, z), Blocks.DIRT.defaultBlockState());
-				newSoulWorld.setBlockAndUpdate(new BlockPos(x, DimensionHelper.FLOOR_LEVEL - 4, z), Blocks.STONE.defaultBlockState());
+				for (int z = -PLATFORM_RADIUS; z < PLATFORM_RADIUS; z++)
+				{
+					newSoulWorld.setBlockAndUpdate(new BlockPos(x, DimensionHelper.FLOOR_LEVEL, z), Blocks.GRASS_BLOCK.defaultBlockState());
+					newSoulWorld.setBlockAndUpdate(new BlockPos(x, DimensionHelper.FLOOR_LEVEL - 1, z), Blocks.DIRT.defaultBlockState());
+					newSoulWorld.setBlockAndUpdate(new BlockPos(x, DimensionHelper.FLOOR_LEVEL - 2, z), Blocks.DIRT.defaultBlockState());
+					newSoulWorld.setBlockAndUpdate(new BlockPos(x, DimensionHelper.FLOOR_LEVEL - 3, z), Blocks.DIRT.defaultBlockState());
+					newSoulWorld.setBlockAndUpdate(new BlockPos(x, DimensionHelper.FLOOR_LEVEL - 4, z), Blocks.STONE.defaultBlockState());
+				}
 			}
 		}
-	}
 		//send a packet to all players, requesting that they refresh their dimension list.
 		Network.sendPacketToAll(new SyncDimensionListMessage(worldKey, true));
 		//finally return the new world so the player can finish teleporting there
 		return newSoulWorld;
+	}
+
+	public static ServerLevel createSoulDimension(MinecraftServer server, ResourceKey<Level> worldKey)
+	{
+		return createSoulDimension(server, worldKey, UUID.randomUUID().toString());
 	}
 }

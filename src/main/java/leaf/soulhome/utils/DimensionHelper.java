@@ -155,7 +155,7 @@ public class DimensionHelper
 
         return soulDimensionForPlayer != null
                ? soulDimensionForPlayer // Found it! return it. Otherwise make a new one
-               : DimensionRegistry.createSoulDimension(server, worldKey);
+               : DimensionRegistry.createSoulDimension(server, worldKey, userUUID);
     }
 
 
