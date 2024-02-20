@@ -154,7 +154,7 @@ public class DimensionRegistry
 		// Use the UUID of the player to choose an island structure, different players will get different islands representitive of their 'souls'
 		UUID soul = UUID.fromString(userUUID);
 		Random rand = new Random(soul.getLeastSignificantBits() ^ soul.getMostSignificantBits());
-		int islandStyle = rand.nextInt() % 2; // TODO: add more islands, need to change this value as more islands are added
+		int islandStyle = rand.nextInt() % 3; // TODO: add more islands, need to change this value as more islands are added
 		ResourceLocation soulIslandLocation = new ResourceLocation(SoulHome.MODID, "soul_island" + islandStyle);
 
 		Optional<StructureTemplate> templateOptional = manager.get(soulIslandLocation);
