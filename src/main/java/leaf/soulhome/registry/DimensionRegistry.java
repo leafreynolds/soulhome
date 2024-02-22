@@ -12,6 +12,7 @@ import leaf.soulhome.network.Network;
 import leaf.soulhome.network.SyncDimensionListMessage;
 import leaf.soulhome.utils.DimensionHelper;
 import leaf.soulhome.utils.LogHelper;
+import leaf.soulhome.mixin.DefrostedRegistry;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.ResourceKeyArgument;
 import net.minecraft.core.*;
@@ -103,7 +104,12 @@ public class DimensionRegistry
 		if (dimensionRegistry instanceof WritableRegistry)
 		{
 			final WritableRegistry<LevelStem> writableRegistry = (WritableRegistry<LevelStem>) dimensionRegistry;
+			boolean wasFrozen = ((DefrostedRegistry) writableRegistry).getFrozen();
+			((DefrostedRegistry) writableRegistry).setFrozen(false);
 			writableRegistry.register(dimensionKey, dimension, Lifecycle.stable());
+
+			if(wasFrozen)
+				((DefrostedRegistry) writableRegistry).setFrozen(true);
 		}
 		else
 		{

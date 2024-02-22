@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "soulhome.refmap.json",
   "mixins": [
+    "DefrostedRegistry"
   ],
   "client": [
     "EffectInstanceMixin",
