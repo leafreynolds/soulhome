@@ -17,6 +17,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+import java.util.UUID;
+
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(SoulHome.MODID)
 public class SoulHome

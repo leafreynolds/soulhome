@@ -28,7 +28,7 @@ import static leaf.soulhome.constants.Constants.NBTKeys.*;
 
 public class DimensionHelper
 {
-    public static final int FLOOR_LEVEL = 64;
+    public static final int FLOOR_LEVEL = 70;
 
     // Check if the user is in the soul dimension
     // used for deciding if we are moving the player in or out of the dimension.
@@ -155,7 +155,7 @@ public class DimensionHelper
 
         return soulDimensionForPlayer != null
                ? soulDimensionForPlayer // Found it! return it. Otherwise make a new one
-               : DimensionRegistry.createSoulDimension(server, worldKey);
+               : DimensionRegistry.createSoulDimension(server, worldKey, userUUID);
     }
 
 
