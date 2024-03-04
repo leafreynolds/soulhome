@@ -179,13 +179,13 @@ public final class CompoundNBTHelper
     @Nullable
     public static UUID getUuid(CompoundTag compoundTag, String tag)
     {
-        return verifyExistance(compoundTag, tag + "Most") && verifyExistance(compoundTag, tag + "Least")
+        return verifyExistance(compoundTag, tag)
                ? compoundTag.getUUID(tag) : null;
     }
     @Nullable
     public static UUID getUuid(CompoundTag compoundTag, String tag, UUID defaultUUID)
     {
-        return verifyExistance(compoundTag, tag + "Most") && verifyExistance(compoundTag, tag + "Least")
+        return verifyExistance(compoundTag, tag)
                ? compoundTag.getUUID(tag) : defaultUUID;
     }
 

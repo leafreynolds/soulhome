@@ -271,7 +271,7 @@ def changeLogResolver = { ->
     }
 
     generatedChangelog =
-            "Soulhome - Build" + build_number.toString() +
+            "Soulhome - Build " + build_number.toString() +
                     "<br><br> $generatedChangelog"
     resolvedChangelog = generatedChangelog
     return generatedChangelog
