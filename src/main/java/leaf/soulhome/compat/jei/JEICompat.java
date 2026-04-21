@@ -65,8 +65,8 @@ public class JEICompat implements IModPlugin
     {
         //reg.addIngredientInfo(
         //        new ItemStack(item),
-        //        VanillaTypes.ITEM,
-        //        String.format(Constants.StringKeys.SOULHOME_ITEM_TOOLTIP, item.getRegistryName().getPath()));
+        //        VanillaTypes.ITEM_STACK,
+        //        String.format(Constants.StringKeys.SOULHOME_ITEM_TOOLTIP, BuiltInRegistries.ITEM.getKey(item).getPath()));
     }
 
 }

@@ -9,28 +9,25 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class CreativeTabsRegistry
 {
 	public static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, SoulHome.MODID);
 
-	public static final RegistryObject<CreativeModeTab> TAB = CREATIVE_TABS.register("soulhome", () -> {
+	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TAB = CREATIVE_TABS.register("soulhome", () -> {
 
 		CreativeModeTab.Builder builder = CreativeModeTab.builder()
-				//.withSearchBar()
 				.title(Component.translatable("tabs." + SoulHome.MODID + ".items"))
 				.icon(ItemsRegistry.SOUL_KEY.get()::getDefaultInstance)
 				.displayItems((displayParameters, output) -> {
-					for (RegistryObject<Item> item : ItemsRegistry.ITEMS.getEntries())
+					for (DeferredHolder<Item, ? extends Item> item : ItemsRegistry.ITEMS.getEntries())
 					{
 						output.accept(item.get());
 					}
 				})
 				.withTabFactory(SoulhomeCreativeTab::new);
-
-
 
 		return builder.build();
 	});

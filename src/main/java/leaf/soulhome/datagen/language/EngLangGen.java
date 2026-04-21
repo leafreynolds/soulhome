@@ -9,13 +9,12 @@ import leaf.soulhome.constants.Constants;
 import leaf.soulhome.items.BoundSoulkey;
 import leaf.soulhome.utils.ResourceLocationHelper;
 import leaf.soulhome.utils.StringHelper;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.common.data.LanguageProvider;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.data.LanguageProvider;
 
 public class EngLangGen extends LanguageProvider
 {
@@ -31,10 +30,10 @@ public class EngLangGen extends LanguageProvider
     protected void addTranslations()
     {
         //Items and Blocks
-        for (Item item : ForgeRegistries.ITEMS.getValues())
+        for (Item item : BuiltInRegistries.ITEM)
         {
             final ResourceLocation registryName = ResourceLocationHelper.get(item);
-            if (registryName.getNamespace().contentEquals(SoulHome.MODID))
+            if (registryName != null && registryName.getNamespace().contentEquals(SoulHome.MODID))
             {
                 final String path = registryName.getPath();
                 String localisedString = StringHelper.fixCapitalisation(path);
@@ -45,7 +44,6 @@ public class EngLangGen extends LanguageProvider
                 switch (localisedString)
                 {
                     case "Guide":
-                        //localisedString = "exampleOverride";
                         tooltipString = "If patchouli is installed, this is your guide to the mod";
                         break;
                     case "Soulkey":
@@ -68,10 +66,10 @@ public class EngLangGen extends LanguageProvider
         }
 
         //Entities
-        for (EntityType<?> type : ForgeRegistries.ENTITY_TYPES)
+        for (EntityType<?> type : BuiltInRegistries.ENTITY_TYPE)
         {
             final ResourceLocation registryName = ResourceLocationHelper.get(type);
-            if (registryName.getNamespace().equals(SoulHome.MODID))
+            if (registryName != null && registryName.getNamespace().equals(SoulHome.MODID))
             {
                 add(type.getDescriptionId(), StringHelper.fixCapitalisation(registryName.getPath()));
             }
@@ -79,19 +77,6 @@ public class EngLangGen extends LanguageProvider
 
         //ItemGroups/Tabs
         add("tabs." + SoulHome.MODID + ".items", "SoulHome");
-
-        //Damage Sources
-
-        //Containers
-
-        //effects
-
-        //Sound Schemes
-
-        //Configs
-
-        //Commands
-
 
         //Tooltips
         add(Constants.StringKeys.SHIFT_ITEM_TOOLTIP, "\u00A77Hold \u00A78[\u00A7eShift\u00A78]");

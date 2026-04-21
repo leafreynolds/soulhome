@@ -5,7 +5,7 @@
 package leaf.soulhome.compat.patchouli;
 
 import leaf.soulhome.utils.LogHelper;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 
 public class PatchouliCompat
 {

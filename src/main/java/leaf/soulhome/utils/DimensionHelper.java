@@ -16,7 +16,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.core.Registry;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
@@ -70,7 +69,7 @@ public class DimensionHelper
             ResourceKey<Level> destinationKey =
                     ResourceKey.create(
                             Registries.DIMENSION,
-                            new ResourceLocation(
+                            ResourceLocation.fromNamespaceAndPath(
                                     soulNBT.getString(LAST_DIMENSION_MOD_ID),
                                     soulNBT.getString(LAST_DIMENSION_MOD_DIMENSION))
                     );
@@ -101,7 +100,6 @@ public class DimensionHelper
             //now we can go to the soul
             //will create the dimension for that user if it's the first time accessing it
             destination = getOrCreateSoulDimension(targetSoulUUID.toString(), server);
-
         }
 
         //dimension location eg minecraft:overworld
@@ -127,7 +125,7 @@ public class DimensionHelper
 
 
             Vec3 posRelativeToTeleporter = ent.position().subtract(playerEntity.position());
-            Vec3 newPosByDestination = new Vec3(x,y,z).add(posRelativeToTeleporter);
+            Vec3 newPosByDestination = new Vec3(x, y, z).add(posRelativeToTeleporter);
 
 
             TeleportHelper.teleportEntity(

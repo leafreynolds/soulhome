@@ -7,16 +7,15 @@ package leaf.soulhome.datagen.items;
 import leaf.soulhome.SoulHome;
 import leaf.soulhome.registry.ItemsRegistry;
 import leaf.soulhome.utils.ResourceLocationHelper;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.model.generators.ItemModelBuilder;
-import net.minecraftforge.client.model.generators.ItemModelProvider;
-import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
+import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.function.Supplier;
 
@@ -31,10 +30,10 @@ public class ItemModelsGen extends ItemModelProvider
     @Override
     protected void registerModels()
     {
-        for (RegistryObject<Item> itemRegistryObject : ItemsRegistry.ITEMS.getEntries())
+        for (DeferredHolder<Item, ? extends Item> itemHolder : ItemsRegistry.ITEMS.getEntries())
         {
-            String path = getPath(itemRegistryObject);
-            Item item = itemRegistryObject.get();
+            String path = getPath(itemHolder);
+            Item item = itemHolder.get();
 
             //blocks have their own model rules
             if (item instanceof BlockItem)

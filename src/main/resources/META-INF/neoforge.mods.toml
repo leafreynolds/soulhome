@@ -1,0 +1,31 @@
+
+modLoader="javafml"
+loaderVersion="[4,)"
+license="SoulHome License"
+
+[[mods]]
+modId="soulhome"
+version="${file.jarVersion}"
+displayName="SoulHome"
+logoFile="soulhome.png"
+authors="Leaf Reynolds"
+description='''
+This is a long form description of the mod. You can write whatever you want here
+'''
+
+[[dependencies.soulhome]]
+    modId="neoforge"
+    type="required"
+    versionRange="[21.1,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.soulhome]]
+    modId="minecraft"
+    type="required"
+    versionRange="[1.21.1,1.22)"
+    ordering="NONE"
+    side="BOTH"
+
+[[mixins]]
+    config="soulhome.mixins.json"

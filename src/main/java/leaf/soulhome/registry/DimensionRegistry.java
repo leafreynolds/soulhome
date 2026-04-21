@@ -5,8 +5,8 @@
 package leaf.soulhome.registry;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.Lifecycle;
+import com.mojang.serialization.MapCodec;
 import leaf.soulhome.SoulHome;
 import leaf.soulhome.dimensions.SoulChunkGenerator;
 import leaf.soulhome.network.Network;
@@ -14,6 +14,7 @@ import leaf.soulhome.network.SyncDimensionListMessage;
 import leaf.soulhome.utils.DimensionHelper;
 import leaf.soulhome.utils.LogHelper;
 import leaf.soulhome.mixin.DefrostedRegistry;
+import leaf.soulhome.utils.ResourceLocationHelper;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -38,10 +39,10 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import net.minecraft.world.level.storage.DerivedLevelData;
 import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraft.world.level.storage.WorldData;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.level.LevelEvent;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.level.LevelEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.Map;
 import java.util.Optional;
@@ -52,9 +53,9 @@ import java.util.function.BiFunction;
 
 public class DimensionRegistry
 {
-	public static final DeferredRegister<Codec<? extends ChunkGenerator>> CHUNK_GENERATORS = DeferredRegister.create(Registries.CHUNK_GENERATOR, SoulHome.MODID);
-	public static final ResourceKey<Biome> SOULHOME_BIOME = ResourceKey.create(Registries.BIOME, new ResourceLocation(SoulHome.MODID, SoulHome.MODID));
-	public static final RegistryObject<Codec<? extends ChunkGenerator>> CHUNK_GENERATOR = CHUNK_GENERATORS.register(SoulHome.MODID, () -> SoulChunkGenerator.providerCodec);
+	public static final DeferredRegister<MapCodec<? extends ChunkGenerator>> CHUNK_GENERATORS = DeferredRegister.create(Registries.CHUNK_GENERATOR, SoulHome.MODID);
+	public static final ResourceKey<Biome> SOULHOME_BIOME = ResourceKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(SoulHome.MODID, SoulHome.MODID));
+	public static final DeferredHolder<MapCodec<? extends ChunkGenerator>, MapCodec<? extends ChunkGenerator>> CHUNK_GENERATOR = CHUNK_GENERATORS.register(SoulHome.MODID, () -> SoulChunkGenerator.providerCodec);
 
 
 	public static class DimensionTypes
@@ -97,7 +98,7 @@ public class DimensionRegistry
 			final WritableRegistry<LevelStem> writableRegistry = (WritableRegistry<LevelStem>) dimensionRegistry;
 			boolean wasFrozen = ((DefrostedRegistry) writableRegistry).getFrozen();
 			((DefrostedRegistry) writableRegistry).setFrozen(false);
-			writableRegistry.register(dimensionKey, dimension, Lifecycle.stable());
+			writableRegistry.register(dimensionKey, dimension, RegistrationInfo.BUILT_IN);
 
 			if (wasFrozen)
 			{
@@ -143,11 +144,11 @@ public class DimensionRegistry
 		Map<ResourceKey<Level>, ServerLevel> map = server.forgeGetWorldMap();
 		map.put(worldKey, newSoulWorld);
 
-		// increment forge worldArrayMarker, so that the world will tick()
+		// increment worldArrayMarker so that the world will tick()
 		server.markWorldsDirty();
 
 		//then post an event for our new world. Welcome :)
-		MinecraftForge.EVENT_BUS.post(new LevelEvent.Load(newSoulWorld));
+		NeoForge.EVENT_BUS.post(new LevelEvent.Load(newSoulWorld));
 		LogHelper.info("New soul dimension has been created: " + dimensionKey.location());
 
 		StructurePlaceSettings settings = (new StructurePlaceSettings()).setIgnoreEntities(true).setMirror(Mirror.NONE).setRotation(Rotation.NONE);
@@ -157,7 +158,7 @@ public class DimensionRegistry
 		UUID soul = UUID.fromString(userUUID);
 		Random rand = new Random(soul.getLeastSignificantBits() ^ soul.getMostSignificantBits());
 		int islandStyle = rand.nextInt() % 3; // TODO: add more islands, need to change this value as more islands are added
-		ResourceLocation soulIslandLocation = new ResourceLocation(SoulHome.MODID, "soul_island" + islandStyle);
+		ResourceLocation soulIslandLocation = ResourceLocationHelper.prefix("soul_island" + islandStyle);
 
 		Optional<StructureTemplate> templateOptional = manager.get(soulIslandLocation);
 		if (templateOptional.isPresent())

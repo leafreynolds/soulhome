@@ -1,8 +1,5 @@
 /*
  * File created ~ 24 - 4 - 2021 ~ Leaf
- * Special Thank you to ChampionAsh5357 from the forge project discord!
- * They provided a series of tutorials with examples of how to add new sections of data generation
- * Generating 20+ different metal related blocks, items, curios etc would have been a nightmare without it.
  */
 
 package leaf.soulhome.datagen;
@@ -15,13 +12,12 @@ import leaf.soulhome.datagen.patchouli.PatchouliGen;
 import leaf.soulhome.datagen.recipe.RecipeGen;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 
-@Mod.EventBusSubscriber(modid = SoulHome.MODID, bus = Bus.MOD)
+@EventBusSubscriber(modid = SoulHome.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class DataGen
 {
 
@@ -40,9 +36,9 @@ public class DataGen
             return;
         }
 
-        generator.addProvider(true, new AdvancementGen(packOutput));
+        generator.addProvider(true, new AdvancementGen(packOutput, event.getLookupProvider()));
         generator.addProvider(true, new ItemModelsGen(packOutput, existingFileHelper));
-        generator.addProvider(true, new RecipeGen(packOutput));
+        generator.addProvider(true, new RecipeGen(packOutput, event.getLookupProvider()));
 
         generator.addProvider(true, new PatchouliGen(packOutput));
 

@@ -16,13 +16,13 @@ public class ClientPacketHandler
     public static void syncDimensionList(SyncDimensionListMessage packet)
     {
         LocalPlayer player = Minecraft.getInstance().player;
-        ResourceKey<Level> key = packet.getId();
-        if (player == null || key == null)
+        if (player == null || packet.id() == null)
         {
             return;
         }
+        ResourceKey<Level> key = packet.levelKey();
         Set<ResourceKey<Level>> worlds = player.connection.levels();
-        if (packet.getAdd())
+        if (packet.add())
         {
             worlds.add(key);
         }

@@ -24,21 +24,19 @@ public class TeleportHelper
 {
     public static void teleportEntity(Entity entity, ServerLevel destinationDimension, double x, double y, double z, float yRot, float xRot)
     {
-        if (entity == null || entity.level().isClientSide || !entity.canChangeDimensions())
+        if (entity == null || entity.level().isClientSide)
         {
             return;
         }
 
         ServerLevel currentDimension = entity.getServer().getLevel(entity.getCommandSenderWorld().dimension());
 
-
         boolean isChangingDimension = !currentDimension.dimension().location().equals(destinationDimension.dimension().location());
         final boolean entityIsPlayer = entity instanceof ServerPlayer;
         final ServerPlayer serverPlayerEntity = entityIsPlayer ? (ServerPlayer) entity : null;
 
-        if (isChangingDimension && !entity.canChangeDimensions())
+        if (isChangingDimension && !entity.canChangeDimensions(currentDimension, destinationDimension))
         {
-            //early exit
             return;
         }
 
@@ -74,11 +72,10 @@ public class TeleportHelper
             //restore stuff. Annoyingly it doesn't happen automatically
             for (MobEffectInstance effectinstance : serverPlayerEntity.getActiveEffects())
             {
-                serverPlayerEntity.connection.send(new ClientboundUpdateMobEffectPacket(serverPlayerEntity.getId(), effectinstance));
+                serverPlayerEntity.connection.send(new ClientboundUpdateMobEffectPacket(serverPlayerEntity.getId(), effectinstance, false));
             }
 
             LevelData worldInfo = serverPlayerEntity.level().getLevelData();
-            //I'd always wondered what the deal was with xp not showing properly.
             serverPlayerEntity.connection.send(new ClientboundPlayerAbilitiesPacket(serverPlayerEntity.getAbilities()));
             serverPlayerEntity.connection.send(new ClientboundChangeDifficultyPacket(worldInfo.getDifficulty(), worldInfo.isDifficultyLocked()));
             serverPlayerEntity.connection.send(new ClientboundSetExperiencePacket(serverPlayerEntity.experienceProgress, serverPlayerEntity.totalExperience, serverPlayerEntity.experienceLevel));
@@ -94,7 +91,6 @@ public class TeleportHelper
                 entity = originalEntity.getType().create(destinationDimension);
                 if (entity == null)
                 {
-                    //error
                     LogHelper.error("Was unable to create an entity when trying to teleport it.");
                     return;
                 }
@@ -117,7 +113,6 @@ public class TeleportHelper
             }
         }
 
-        //not sure if I care about elytra, SO todo decide later. might be fun to let them keep flying?
         if (!(entity instanceof LivingEntity) || !((LivingEntity) entity).isFallFlying())
         {
             entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.0D, 0.0D, 1.0D));

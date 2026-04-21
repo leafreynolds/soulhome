@@ -4,16 +4,14 @@
 
 package leaf.soulhome.dimensions;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import leaf.soulhome.registry.BiomeRegistry;
 import leaf.soulhome.utils.DimensionHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
+import net.minecraft.resources.RegistryFileCodec;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.RegistryOps;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
@@ -26,31 +24,35 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.blending.Blender;
-import net.minecraft.world.level.levelgen.structure.StructureSet;
 
-import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
 
 public class SoulChunkGenerator extends ChunkGenerator
 {
-    public static final Codec<SoulChunkGenerator> providerCodec =
-            RecordCodecBuilder.create(builder ->
-                    builder.group(RegistryOps.retrieveElement(BiomeRegistry.SOUL_BIOME_KEY))
-                            .apply(builder, builder.stable(SoulChunkGenerator::new)));
+    private final Holder<Biome> biome;
+
+    public static final MapCodec<SoulChunkGenerator> providerCodec =
+            RecordCodecBuilder.mapCodec(instance ->
+                    instance.group(
+                            RegistryFileCodec.<Biome>create(Registries.BIOME, Biome.DIRECT_CODEC)
+                                    .fieldOf("biome").forGetter(SoulChunkGenerator::getBiome)
+                    ).apply(instance, SoulChunkGenerator::new));
 
 
-    public SoulChunkGenerator(Holder.Reference<Biome> p_255723_)
+    public SoulChunkGenerator(Holder<Biome> biome)
     {
-        super(new FixedBiomeSource(p_255723_));
+        super(new FixedBiomeSource(biome));
+        this.biome = biome;
     }
 
-
+    public Holder<Biome> getBiome()
+    {
+        return biome;
+    }
 
     @Override
-    protected Codec<? extends ChunkGenerator> codec()
+    protected MapCodec<? extends ChunkGenerator> codec()
     {
         return providerCodec;
     }
@@ -79,7 +81,7 @@ public class SoulChunkGenerator extends ChunkGenerator
     }
 
     @Override
-    public CompletableFuture<ChunkAccess> fillFromNoise(Executor executor, Blender blender, RandomState randomState, StructureManager structureManager, ChunkAccess chunkAccess)
+    public CompletableFuture<ChunkAccess> fillFromNoise(Blender blender, RandomState randomState, StructureManager structureManager, ChunkAccess chunkAccess)
     {
         return CompletableFuture.completedFuture(chunkAccess);
     }
@@ -111,7 +113,6 @@ public class SoulChunkGenerator extends ChunkGenerator
     @Override
     public void addDebugScreenInfo(List<String> p_223175_, RandomState randomState, BlockPos blockPos)
     {
-        //??
     }
 
 }

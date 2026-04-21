@@ -24,19 +24,18 @@ public class EntityHelper
 
         if (!includeSelf)
         {
-            //removes self entity if it exists in the list
-            //otherwise list unchanged
             entitiesFound.remove(selfEntity);
         }
 
         return entitiesFound;
     }
 
+    // canChangeDimensions now requires source/dest levels as parameters in 1.21.1,
+    // so we omit that check here and let TeleportHelper handle it.
     private static final Predicate<Entity> ALLOWED_TO_TELEPORT =
             EntitySelector.NO_SPECTATORS
                     .and(EntitySelector.LIVING_ENTITY_STILL_ALIVE)
-                    .and(Entity::canChangeDimensions)
-                    .and((entity)->!(entity instanceof Enemy));
+                    .and((entity) -> !(entity instanceof Enemy));
 
     public static List<Entity> getEntitiesInRange(Entity entity, double range, boolean includeSelf)
     {
