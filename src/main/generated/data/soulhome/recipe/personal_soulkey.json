@@ -15,7 +15,7 @@
     "  E"
   ],
   "result": {
-    "item": "soulhome:personal_soulkey"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "soulhome:personal_soulkey"
+  }
 }

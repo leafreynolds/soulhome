@@ -1,7 +1,7 @@
-// 1.20.1	2025-01-10T18:36:01.0211861	Recipes
-3996adbddbb699ac8ca2f8ee4e0ecb9e163d6b6b data/soulhome/advancements/recipes/misc/guide.json
-16138fb3b3859715b6587417e66a4501496e2508 data/soulhome/advancements/recipes/transportation/personal_soulkey.json
-914177d90957f32b98bc73ade8a595143666c5fa data/soulhome/advancements/recipes/transportation/soulkey.json
-494993b83210dcbc9e83693251349f4fb718543d data/soulhome/recipes/guide.json
-f36c1f3bef0abf74efe415ba8014c3d4725f5182 data/soulhome/recipes/personal_soulkey.json
-c81f4e3b2073d99ab5f09477c101e19bc059a763 data/soulhome/recipes/soulkey.json
+// 1.21.1	2026-04-30T11:00:16.048132	Recipes
+ea4f20432f19b1f64103014e75ec223734ffbc92 data/soulhome/advancement/recipes/misc/guide.json
+363cc06bb3d61b74bdebf304ae6a3c4df109541a data/soulhome/advancement/recipes/transportation/personal_soulkey.json
+697a6f68627c3271811b159f32b3bc0079d6cd82 data/soulhome/advancement/recipes/transportation/soulkey.json
+f2a30906da5b3bca4004d6b0693de40173ff1590 data/soulhome/recipe/guide.json
+89a41576c7d88873e052efa80b302094653a059a data/soulhome/recipe/personal_soulkey.json
+732f218916607e5094ff6a5a206426d1f2376ecd data/soulhome/recipe/soulkey.json

@@ -3,7 +3,7 @@
     "tick": {
       "conditions": {
         "items": [
-          null
+          {}
         ]
       },
       "trigger": "minecraft:inventory_changed"
@@ -15,10 +15,9 @@
     "description": {
       "translate": "advancements.soulhome.main.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
-      "item": "soulhome:soulkey"
+      "count": 1,
+      "id": "soulhome:soulkey"
     },
     "show_toast": false,
     "title": {

@@ -1,13 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_material": {
+    "has_soul_key": {
       "conditions": {
         "items": [
           {
-            "items": [
-              "minecraft:ender_eye"
-            ]
+            "items": "soulhome:soulkey"
           }
         ]
       },
@@ -15,21 +13,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "soulhome:personal_soulkey"
+        "recipe": "soulhome:guide"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_material",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_soul_key"
     ]
   ],
   "rewards": {
     "recipes": [
-      "soulhome:personal_soulkey"
+      "soulhome:guide"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

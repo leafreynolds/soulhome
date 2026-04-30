@@ -225,3 +225,25 @@ void setGenericCurseArtifactData(UploadArtifact artifact, String changelog, Stri
     artifact.addModLoader("NeoForge")
 }
 
+if (System.getenv("MODRINTH_API_TOKEN") != null || project.hasProperty('modrinth_api_token')) {
+    println "Enabling Modrinth config"
+    modrinth {
+        //https://modrinth.com/settings/pats
+        token = System.getenv("MODRINTH_API_TOKEN") ?: project.findProperty("modrinth_api_token")
+        projectId = project.modrinth_project_id
+        versionType = release_type
+        versionNumber = project.version + "+neoforge-" + project.minecraft_version
+        versionName = "Soulhome Build ${build_number}"
+        uploadFile = jar
+        changelog = changeLogResolver.call()
+        gameVersions = [project.minecraft_version]
+        loaders = ['neoforge']
+        dependencies {
+            optional.project "jei"
+            optional.project "patchouli"
+            optional.project "jade"
+            optional.project "curios"
+        }
+    }
+}
+

@@ -9,7 +9,7 @@
             "entity": "this",
             "predicate": {
               "location": {
-                "biome": "soulhome:soulhome"
+                "biomes": "soulhome:soulhome"
               }
             }
           }
@@ -19,16 +19,13 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.soulhome.entered_soul_dimension.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
-      "item": "soulhome:guide"
+      "count": 1,
+      "id": "soulhome:guide"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.soulhome.entered_soul_dimension.title"
     }
